@@ -32,14 +32,14 @@ function rays.drawRays()
 
         local aTan = -1 / math.tan(ra) -- arc tan
         if ra > math.pi then
-            ry = math.floor(player.y / 64) * 64 - 0.0001
+            ry = math.floor(player.y / map.mapS) * map.mapS - 0.0001
             rx = (player.y - ry) * aTan + player.x
-            yo = -64
+            yo = -map.mapS
             xo = -yo * aTan
         elseif ra < math.pi then
-            ry = math.floor(player.y / 64) * 64 + 64
+            ry = math.floor(player.y / map.mapS) * map.mapS + map.mapS
             rx = (player.y - ry) * aTan + player.x
-            yo = 64
+            yo = map.mapS
             xo = -yo * aTan
         else
             rx = player.x
@@ -48,8 +48,8 @@ function rays.drawRays()
         end
 
         while DOF < 8 do
-            local mx = math.floor(rx / 64)
-            local my = math.floor(ry / 64)
+            local mx = math.floor(rx / map.mapS)
+            local my = math.floor(ry / map.mapS)
 
             local map = require("map")
 
@@ -76,14 +76,14 @@ function rays.drawRays()
         DOF = 0
         local nTan = -math.tan(ra) -- not / negative tan
         if ra > P2 and ra < P3 then
-            rx = math.floor(player.x / 64) * 64 - 0.0001
+            rx = math.floor(player.x / map.mapS) * map.mapS - 0.0001
             ry = (player.x - rx) * nTan + player.y
-            xo = -64
+            xo = -map.mapS
             yo = -xo * nTan
         elseif ra < P2 or ra > P3 then
-            rx = math.floor(player.x / 64) * 64 + 64
+            rx = math.floor(player.x / map.mapS) * map.mapS + map.mapS
             ry = (player.x - rx) * nTan + player.y
-            xo = 64
+            xo = map.mapS
             yo = -xo * nTan
         else
             rx = player.x
@@ -92,8 +92,8 @@ function rays.drawRays()
         end
 
         while DOF < 8 do
-            local mx = math.floor(rx / 64)
-            local my = math.floor(ry / 64)
+            local mx = math.floor(rx / map.mapS)
+            local my = math.floor(ry / map.mapS)
 
             local map = require("map")
 
