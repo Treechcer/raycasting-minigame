@@ -7,8 +7,8 @@ function love.load()
 end
 
 function love.draw()
-    map.drawMap()
     rays.drawRays()
+    map.drawMap()
     player.drawPlayer()
 end
 
@@ -18,6 +18,29 @@ function love.update(dt)
         player.deltaX = (math.cos(player.angle) * 50) * dt
         player.deltaY = (math.sin(player.angle) * 50) * dt
     end
+
+    local xo = 0
+    local yo = 0
+
+    if player.deltaX < 0 then
+        xo = -40
+    else
+        xo = 40
+    end
+
+    if player.deltaY < 0 then
+        yo = -40
+    else
+        yo = 40
+    end
+
+    ipx = math.floor(player.x/64)
+    ipxADD = math.floor((player.x + xo) / 64)
+    ipxSUB = math.floor((player.x - xo) / 64)
+
+    ipy = math.floor(player.y / 64)
+    ipyADD = math.floor((player.y + yo) / 64)
+    ipySUB = math.floor((player.y - yo) / 64)
 
     if love.keyboard.isDown("a") then
         player.angle = player.angle - (3 * dt)
@@ -37,10 +60,18 @@ function love.update(dt)
         player.deltaY = (math.sin(player.angle) * 50) * dt
     end
     if love.keyboard.isDown("w") then
-        player.x = player.x + player.deltaX
-        player.y = player.y + player.deltaY
+        if map.map[ipy * map.mapX + ipxADD] == 0 then
+            player.x = player.x + player.deltaX
+        end
+        if map.map[ipyADD * map.mapX + ipx] == 0 then
+           player.y = player.y + player.deltaY
+        end
     elseif love.keyboard.isDown("s") then
-        player.x = player.x - player.deltaX
-        player.y = player.y - player.deltaY
+        if map.map[ipy * map.mapX + ipxSUB] == 0 then
+            player.x = player.x - player.deltaX
+        end
+        if map.map[ipySUB * map.mapX + ipx] == 0 then
+           player.y = player.y - player.deltaY
+        end
     end
 end
