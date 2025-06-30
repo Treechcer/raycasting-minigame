@@ -24,6 +24,10 @@ function rays.drawRays()
     end
 
     for r = 1, 60 do
+
+        vmt = 0
+        hmt = 0
+
         DOF = 0
         -- HORIZONTAL LINE CHECK
         local distanceH = 100000000 --really high number because we wan't shortest distance
@@ -55,11 +59,12 @@ function rays.drawRays()
 
             local mp = my * map.mapX + mx + 1
 
-            if mp >= 0 and mp <= map.mapX * map.mapY and map.map[mp] == 1 then
+            if mp > 0 and mp < map.mapX * map.mapY and map.mapW[mp] > 0 then
                 hx = rx
                 hy = ry
                 distanceH = rays.distance(player.x, player.y, hx, hy, ra)
                 DOF = 8
+                hmt= map.mapW[mp] - 1
             else
                 rx = rx + xo
                 ry = ry + yo
@@ -99,11 +104,12 @@ function rays.drawRays()
 
             local mp = my * map.mapX + mx + 1
 
-            if mp >= 0 and mp <= map.mapX * map.mapY and map.map[mp] == 1 then
+            if mp > 0 and mp < map.mapX * map.mapY and map.mapW[mp] > 0 then
                 vx = rx
                 vy = ry
                 distanceV = rays.distance(player.x, player.y, vx, vy, ra)
                 DOF = 8
+                vmt = map.mapW[mp] - 1
             else
                 rx = rx + xo
                 ry = ry + yo
@@ -111,16 +117,18 @@ function rays.drawRays()
             end
         end
 
+        local shade = 1
+
         if distanceV < distanceH then
+            hmt = vmt
             rx = vx
             ry = vy
             finalDis = distanceV
-            love.graphics.setColor(0.9,0,0)
+            shade = 0.75
         else
             rx = hx
             ry = hy
             finalDis = distanceH
-            love.graphics.setColor(0.7,0,0)
         end
 
         local cameraAngle = player.angle - ra
@@ -134,14 +142,89 @@ function rays.drawRays()
         end
 
         finalDis = finalDis * math.cos(cameraAngle)
-
+        
+        --local temp = {love.graphics.getColor()}
+        --love.graphics.setColor(0,1,0)
         --love.graphics.line(player.x, player.y, rx, ry)
+        --love.graphics.setColor(temp)
 
         local lineH = (map.mapS * map.height) / finalDis
         local offset = map.height/2 - lineH/2
         --love.graphics.line(r * 20, offset, r * 20, offset + lineH)
 
-        love.graphics.rectangle("fill", r * 20 - 20, offset, 20, lineH)
+        --love.graphics.rectangle("fill", r * 20 - 20, offset, 20, lineH)
+
+
+
+        -- drawing walls
+        local textures = require("textures")
+        local tyStep = 32 / lineH
+        local ty = 0+hmt * 32
+        if shade == 1 then
+            tx = (rx / 2) % 32
+            if ra > 180 then
+                tx = 31 - tx
+            end
+        else
+            tx = (ry / 2) % 32
+            if ra > 90 and ra < 270 then
+                tx = 31 - tx
+            end
+        end
+
+        love.graphics.setPointSize(15)
+        for y = 0, lineH do
+            local c = textures[math.floor(ty) * 32 + 1 + math.floor(tx)] * shade
+
+            if hmt == 0 then
+                love.graphics.setColor(c    , c / 2, c / 2)
+            elseif hmt == 1 then
+                love.graphics.setColor(c    , c    , c / 2)
+            elseif hmt == 2 then
+                love.graphics.setColor(c / 2, c / 2, c    )
+            elseif hmt == 3 then
+                love.graphics.setColor(c / 2, c    , c / 2)
+            else
+                love.graphics.setColor(c, c, c)
+            end
+            love.graphics.points(r * 15 - 15, y + offset)
+            ty = ty + tyStep
+        end
+
+        -- drwaing floor
+        local screenHeight = love.graphics.getHeight()
+        for y = lineH + offset, screenHeight do
+            local dy = y - (screenHeight / 2)
+            local deg = ra
+            local raFix = math.cos(fixAngleRad(player.angle - ra))
+
+            local tx = player.x / 2 + math.cos(deg) * 158 * 32 / dy / raFix
+            local ty = player.y / 2 - math.sin(deg) * 158 * 32 / dy / raFix
+
+            local mapPoint = map.mapF[math.floor(ty / 32) * map.mapX + math.floor(tx/32) + 1] * 32 * 32
+
+            local txi = (math.floor(tx) % 32)
+            local tyi = (math.floor(ty) % 32)
+        
+            local c = textures[tyi * 32 + txi + 1 + mapPoint] * 0.7
+
+
+            love.graphics.setColor(c, c, c)
+            love.graphics.points(r * 15, y)
+
+            --draw ceiling
+
+            local mapPoint = map.mapC[math.floor(ty / 32) * map.mapX + math.floor(tx/32) + 1] * 32 * 32
+
+            local txi = (math.floor(tx) % 32)
+            local tyi = (math.floor(ty) % 32)
+        
+            local c = textures[tyi * 32 + txi + 1 + mapPoint] * 0.7
+
+
+            love.graphics.setColor(c, c, c)
+            love.graphics.points(r * 15, screenHeight-y)
+        end
 
         if lineH > map.height then
             lineH = map.height
@@ -156,6 +239,16 @@ function rays.drawRays()
         if ra > 2 * math.pi then
             ra = ra - 2 * math.pi
         end
+    end
+end
+
+function fixAngleRad(a)
+    if a < 0 then
+        return a + 2 * math.pi
+    elseif a > 2 * math.pi then
+        return a - 2 * math.pi
+    else
+        return a
     end
 end
 
