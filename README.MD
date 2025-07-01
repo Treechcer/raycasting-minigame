@@ -1,3 +1,3 @@
 # raycasting-minigame
 
-this branch is rewrite of the main branch, but without one tutorial and trying to understand it (like flaws etc.), this will be as main branch when it'll be better
+Branch "main" is a rewrite of the first main branch, it's now under "main-temp" and "rewrite" branches (rewrite will be change, main-temp is "backup" or something like that)
