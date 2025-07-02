@@ -20,7 +20,12 @@ function love.draw()
     engine.castRay()
     map.draw2D()
     player.render2D()
-    --player.checkWall(player.x, player.y)
+    if player.game.debug then
+        player.checkWall(player.x, player.y)
+
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.print(love.timer.getFPS(), 0, 0)
+    end
 end
 
 function love.update(dt)
@@ -33,38 +38,54 @@ function love.update(dt)
         local x = player.x + math.cos(sideAngle) * moveSpeed
         local y = player.y + math.sin(sideAngle) * moveSpeed
 
-        if player.checkWall(x,y) then
-            player.x = x
-            player.y = y
-        end
+        local xMove = player.checkWall(x, player.y)
+        local yMove = player.checkWall(player.x, y)
+
+        x = xMove and x or player.x
+        y = yMove and y or player.y
+
+        player.x = x
+        player.y = y
     elseif love.keyboard.isDown("d") then
         local sideAngle = angleRad + math.rad(90)
 
         local x = player.x + math.cos(sideAngle) * moveSpeed
         local y = player.y + math.sin(sideAngle) * moveSpeed
 
-        if player.checkWall(x,y) then
-            player.x = x
-            player.y = y
-        end
+        local xMove = player.checkWall(x, player.y)
+        local yMove = player.checkWall(player.x, y)
+
+        x = xMove and x or player.x
+        y = yMove and y or player.y
+
+        player.x = x
+        player.y = y
     end
 
     if love.keyboard.isDown("w") then
         local x = player.x + math.cos(angleRad) * moveSpeed
         local y = player.y + math.sin(angleRad) * moveSpeed
 
-        if player.checkWall(x,y) then
-            player.x = x
-            player.y = y
-        end
+        local xMove = player.checkWall(x, player.y)
+        local yMove = player.checkWall(player.x, y)
+
+        x = xMove and x or player.x
+        y = yMove and y or player.y
+
+        player.x = x
+        player.y = y
     elseif love.keyboard.isDown("s") then
         local x = player.x - math.cos(angleRad) * moveSpeed
         local y = player.y - math.sin(angleRad) * moveSpeed
 
-        if player.checkWall(x,y) then
-            player.x = x
-            player.y = y
-        end
+        local xMove = player.checkWall(x, player.y)
+        local yMove = player.checkWall(player.x, y)
+
+        x = xMove and x or player.x
+        y = yMove and y or player.y
+
+        player.x = x
+        player.y = y
     end
 
     if love.keyboard.isDown("q") then

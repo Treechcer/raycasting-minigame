@@ -4,7 +4,11 @@ player = {
     angleDeg = 0,
     speed = 100,
     size = 30,
-    fov = 90
+    fov = 90,
+
+    game = {
+        debug = false,
+    },
 }
 
 local map = require("map")
@@ -36,6 +40,10 @@ function player.checkWall(x, y)
             local tileY = math.floor(checkY / map.block2DSize)
 
             local index = tileY * map.lenght + tileX + 1
+
+            --if player.game.debug then
+                love.graphics.print(map.map[index], 150, 0) 
+            --end
 
             if map.map[index] == 1 then
                 return false

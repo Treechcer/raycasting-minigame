@@ -46,7 +46,7 @@ end
 
 function engine.wallDraw(i, distance, height, width, ditterPattern)
     local colors = require("colors") 
-    darkFactor = 1 + (distance/40)
+    darkFactor = 1 + (distance/50)
 
     for j = 0, height - 1 do
         local yPos = math.floor(300 - height / 2 + j)
