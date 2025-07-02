@@ -20,7 +20,7 @@ function love.draw()
     engine.castRay()
     map.draw2D()
     player.render2D()
-    player.checkWall(player.x, player.y)
+    --player.checkWall(player.x, player.y)
 end
 
 function love.update(dt)
