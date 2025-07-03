@@ -7,6 +7,7 @@ function love.load()
     map = require("map")
     settings = require("settings")
     colors = require("colors")
+    spriteLoad = require("sprites.spriteLoad")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 end
@@ -20,6 +21,8 @@ function love.draw()
     engine.castRay()
     map.draw2D()
     player.render2D()
+    player.renderGun()
+
     if player.game.debug then
         player.checkWall(player.x, player.y)
 
@@ -31,7 +34,52 @@ end
 function love.update(dt)
     local moveSpeed = player.speed * dt
     local angleRad = math.rad(player.angleDeg)
-    
+
+    local moveX = 0
+    local moveY = 0
+    local forwardX = math.cos(angleRad)
+    local forwardY = math.sin(angleRad)
+    local sideX = math.cos(angleRad + math.rad(90))
+    local sideY = math.sin(angleRad + math.rad(90))
+
+    if love.keyboard.isDown("a") then
+        moveX = moveX - sideX
+        moveY = moveY - sideY
+    elseif love.keyboard.isDown("d") then
+        moveX = moveX + sideX
+        moveY = moveY + sideY
+    end
+
+    if love.keyboard.isDown("w") then
+        moveX = moveX + forwardX
+        moveY = moveY + forwardY
+    elseif love.keyboard.isDown("s") then
+        moveX = moveX - forwardX
+        moveY = moveY - forwardY
+    end
+
+    local normalisedVector = (moveX ^ 2 + moveY ^ 2) ^ 0.5
+    if normalisedVector > 0 then
+        --player.x = moveX + player.speed * dt
+        --player.y = moveY + player.speed * dt
+
+        moveX = player.x + (moveX * moveSpeed / normalisedVector)
+        moveY = player.y + (moveY * moveSpeed / normalisedVector)
+
+        local xMove = player.checkWall(moveX, player.y)
+        local yMove = player.checkWall(player.x, moveY)
+
+        local x = xMove and moveX or player.x
+        local y = yMove and moveY or player.y
+
+        player.x = x
+        player.y = y
+
+        player.gunNumDeg = player.gunNumDeg + 300 * dt
+        player.gunNumDeg = degMath.fixDeg(player.gunNumDeg)
+        player.weaponHeight = math.sin(math.rad(player.gunNumDeg)) * 30
+    end
+    --[[
     if love.keyboard.isDown("a") then
         local sideAngle = angleRad - math.rad(90)
 
@@ -86,7 +134,7 @@ function love.update(dt)
 
         player.x = x
         player.y = y
-    end
+    end]]
 
     if love.keyboard.isDown("q") then
         love.event.quit() --for ending the game

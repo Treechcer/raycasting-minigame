@@ -9,9 +9,13 @@ player = {
     game = {
         debug = false,
     },
+
+    weaponHeight = 0,
+    gunNumDeg = 0,
 }
 
 local map = require("map")
+local spriteLoad = require("sprites.spriteLoad")
 
 function player.render2D()
     local tileX = math.floor(player.x / map.block2DSize)
@@ -41,9 +45,9 @@ function player.checkWall(x, y)
 
             local index = tileY * map.lenght + tileX + 1
 
-            --if player.game.debug then
+            if player.game.debug then
                 love.graphics.print(map.map[index], 150, 0) 
-            --end
+            end
 
             if map.map[index] == 1 then
                 return false
@@ -52,6 +56,12 @@ function player.checkWall(x, y)
     end
 
     return true
+end
+
+function player.renderGun()
+    love.graphics.setColor(1,1,1)
+    width, height = love.graphics.getDimensions()
+    love.graphics.draw(spriteLoad.gun, width / 3, height / 1.3 + player.weaponHeight, 0, 0.5, 0.5)
 end
 
 return player
