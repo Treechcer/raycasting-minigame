@@ -8,6 +8,7 @@ function love.load()
     settings = require("settings")
     colors = require("colors")
     spriteLoad = require("sprites.spriteLoad")
+    projectile = require("projectile")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 end
@@ -79,6 +80,16 @@ function love.update(dt)
         player.gunNumDeg = degMath.fixDeg(player.gunNumDeg)
         player.weaponHeight = math.sin(math.rad(player.gunNumDeg)) * 30
     end
+
+    if love.keyboard.isDown("space") and player.shootCooldown >= 0.5 then
+        --bilboarding.createBilboard(spriteLoad.gun, player.x, player.y, -600)
+        projectile.create(projectile.gun)
+        player.shootCooldown = 0
+    end
+
+    player.shootCooldown = player.shootCooldown + dt
+    projectile.move(dt)
+
     --[[
     if love.keyboard.isDown("a") then
         local sideAngle = angleRad - math.rad(90)

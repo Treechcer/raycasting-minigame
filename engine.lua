@@ -77,11 +77,9 @@ function engine.raycast(angleDeg)
 
                 love.graphics.setColor(1,1,1)
                 local heightOffset = bb.z * size / bb.sprite:getHeight()
-                love.graphics.draw(bb.sprite, screenX - size / 2, player.game.height / 2 - size / 2 - heightOffset, 0, size / bb.sprite:getWidth(), size / bb.sprite:getHeight()
-                )
+                love.graphics.draw(bb.sprite, screenX - size / 2, player.game.height / 2 - size / 2 - heightOffset, 0, size / bb.sprite:getWidth(), size / bb.sprite:getHeight())
             end
         end
-
 
         local index = mapY * map.lenght + mapX + 1
         if map.map[index] == 1 then
@@ -164,7 +162,7 @@ function isBlocked(x0, y0, x1, y1) -- small checker if between two points (in X,
     local dx = x1 - x0
     local dy = y1 - y0
     local distance = math.sqrt(dx*dx + dy*dy)
-    local minSteps = 10
+    local minSteps = 30 --makes it percise
     local steps = math.max(minSteps, math.floor(distance / map.block2DSize))
 
     local stepX = dx / steps

@@ -4,6 +4,10 @@ bilboarding = {
 
 local spriteLoad = require("sprites.spriteLoad")
 
-table.insert(bilboarding, {sprite = spriteLoad.gun, x = 100, y = 100, z = -600}) -- z = - 600 is ground level
+function bilboarding.createBilboard(spriteLocation, x, y, z)
+    table.insert(bilboarding, {sprite = spriteLocation, x = x, y = y, z = z})
+end
+
+bilboarding.createBilboard(spriteLoad.gun, 100, 100, -600) -- z = - 600 is ground level
 
 return bilboarding

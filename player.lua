@@ -14,6 +14,7 @@ player = {
 
     weaponHeight = 0,
     gunNumDeg = 0,
+    shootCooldown = 10000 -- makes it that player can shoot, because of course the cooldown won¨t be more like 1s or whatever... yes this number is in seconds
 }
 
 local map = require("map")
