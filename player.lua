@@ -8,6 +8,8 @@ player = {
 
     game = {
         debug = false,
+        width = love.graphics.getWidth(),
+        height = love.graphics.getHeight()
     },
 
     weaponHeight = 0,
