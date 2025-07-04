@@ -104,7 +104,7 @@ function engine.raycast(angleDeg)
 end
 
 function engine.castRay()
-    local rayCount = math.floor(player.fov / 1.5)
+    local rayCount = player.fov
     local fov = player.fov
     local screenWidth = 800
     local sliceWidth = screenWidth / rayCount

@@ -54,6 +54,10 @@ function projectile.move(dt)
 end
 
 function projectile.destroy(proj, index)
+    for i = index, #proj do
+        proj[i].id = proj[i].id - 1
+    end
+    table.remove(bilboarding, proj[index].id)
     table.remove(proj, index)
 end
 
