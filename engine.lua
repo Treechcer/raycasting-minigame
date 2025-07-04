@@ -54,7 +54,6 @@ function engine.raycast(angleDeg)
             break
         end
 
-
         for bilboardI = 1, #bilboarding do
             local bb = bilboarding[bilboardI]
 
@@ -71,7 +70,7 @@ function engine.raycast(angleDeg)
             end
 
             local halfFOV = player.fov / 2
-            if math.abs(relativeAngle) < halfFOV then
+            if math.abs(relativeAngle) < halfFOV and not isBlocked(player.x, player.y, bb.x, bb.y) then
                 local size = 3000 / dist
 
                 local screenX = (relativeAngle + halfFOV) / player.fov * player.game.width
@@ -153,6 +152,42 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX)
                 love.graphics.rectangle("fill", i * width, yPos, width, 1)
         end
     end
+end
+
+function isBlocked(x0, y0, x1, y1) -- small checker if between two points (in X,Y) is or is not wall, now only for bilboarding
+    local mapX0 = math.floor(x0 / map.block2DSize)
+    local mapY0 = math.floor(y0 / map.block2DSize)
+    if map.map[mapY0 * map.lenght + mapX0 + 1] == 1 then
+        return true
+    end
+
+    local dx = x1 - x0
+    local dy = y1 - y0
+    local distance = math.sqrt(dx*dx + dy*dy)
+    local minSteps = 10
+    local steps = math.max(minSteps, math.floor(distance / map.block2DSize))
+
+    local stepX = dx / steps
+    local stepY = dy / steps
+
+    local cx, cy = x0, y0
+    for i=1, steps do
+        cx = cx + stepX
+        cy = cy + stepY
+
+        local mapX = math.floor(cx / map.block2DSize)
+        local mapY = math.floor(cy / map.block2DSize)
+
+        if mapX < 0 or mapX >= map.lenght or mapY < 0 or mapY >= map.height then
+            return false
+        end
+
+        if map.map[mapY * map.lenght + mapX + 1] == 1 then
+            return true
+        end
+    end
+
+    return false
 end
 
 return engine
