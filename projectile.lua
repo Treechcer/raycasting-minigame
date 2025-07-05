@@ -6,7 +6,7 @@ projectile = {
     gun = {
         speed = 200,
         dmg = 20,
-        sprite = spriteLoad.guy,
+        sprite = spriteLoad.gun,
         projectiles = {} -- will have everyring from bilboarding + index that'll be where it's stored in bilboarding + angle
     },
 }

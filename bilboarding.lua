@@ -5,8 +5,7 @@ bilboarding = {
 local spriteLoad = require("sprites.spriteLoad")
 
 function bilboarding.createBilboard(spriteLocation, x, y, z, heightAplify, widthAplify)
-    table.insert(bilboarding, {sprite = spriteLocation, x = x, y = y, z = z, heightAplify = heightAplify, widthAplify = widthAplify})
-    return #bilboarding
+    table.insert(bilboarding, {sprite = spriteLocation, x = x, y = y, z = z, heightAplify = heightAplify, widthAplify = widthAplify, distance = 0})
 end
 
 function bilboarding.print()

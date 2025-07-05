@@ -54,33 +54,6 @@ function engine.raycast(angleDeg)
             break
         end
 
-        for bilboardI = 1, #bilboarding do
-            local bb = bilboarding[bilboardI]
-
-            local dx = bb.x - player.x
-            local dy = bb.y - player.y
-            local dist = math.sqrt(dx * dx + dy * dy)
-            local angleToBB = math.deg(math.atan2(dy, dx))
-            local relativeAngle = angleToBB - player.angleDeg
-            while relativeAngle > 180 do
-                relativeAngle = relativeAngle - 360
-            end
-            while relativeAngle < -180 do
-                relativeAngle = relativeAngle + 360
-            end
-
-            local halfFOV = player.fov / 2
-            if math.abs(relativeAngle) < halfFOV and not isBlocked(player.x, player.y, bb.x, bb.y) then
-                local size = 3000 / dist
-
-                local screenX = (relativeAngle + halfFOV) / player.fov * player.game.width
-
-                love.graphics.setColor(colors.white)
-                local heightOffset = bb.z * size / bb.sprite:getHeight()
-                love.graphics.draw(bb.sprite, screenX - (size * bb.widthAplify) / 2, player.game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / bb.sprite:getWidth(), (size* bb.heightAplify) / bb.sprite:getHeight())
-            end
-        end
-
         local index = mapY * map.lenght + mapX + 1
         if map.map[index] == 1 then
             hit = true
@@ -114,6 +87,8 @@ function engine.castRay()
         local dist, height, side, wallX = engine.raycast(rayAngle)
         engine.wallDraw(i, dist, height, sliceWidth, 10, side, wallX)
     end
+
+    engine.drawBilboarding()
 end
 
 function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX)
@@ -186,6 +161,72 @@ function isBlocked(x0, y0, x1, y1) -- small checker if between two points (in X,
     end
 
     return false
+end
+
+function engine.calculateDistance(x0, y0, x1, y1)
+    local dx = x1 - x0
+    local dy = y1 - y0
+    distance = math.sqrt(dx*dx + dy*dy)
+
+    return distance
+end
+
+function engine.drawBilboarding()
+    for i = 1, #bilboarding do
+        bilboarding[i].distance = engine.calculateDistance(player.x, player.y, bilboarding[i].x, bilboarding[i].y)
+    end
+
+    local sortedByDistanceBilboarding = engine.sortDistance(bilboarding)
+
+    for bilboardI = 1, #sortedByDistanceBilboarding do
+        local bb = sortedByDistanceBilboarding[bilboardI]
+
+        local dx = bb.x - player.x
+        local dy = bb.y - player.y
+        local dist = math.sqrt(dx * dx + dy * dy)
+        local angleToBB = math.deg(math.atan2(dy, dx))
+        local relativeAngle = angleToBB - player.angleDeg
+        while relativeAngle > 180 do
+            relativeAngle = relativeAngle - 360
+        end
+        while relativeAngle < -180 do
+            relativeAngle = relativeAngle + 360
+        end
+
+        local halfFOV = player.fov / 2
+        if math.abs(relativeAngle) < halfFOV and not isBlocked(player.x, player.y, bb.x, bb.y) then
+            local size = 3000 / dist
+            local screenX = (relativeAngle + halfFOV) / player.fov * player.game.width
+
+            love.graphics.setColor(colors.white)
+            local heightOffset = bb.z * size / bb.sprite:getHeight()
+            love.graphics.draw(bb.sprite, screenX - (size * bb.widthAplify) / 2, player.game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / bb.sprite:getWidth(), (size * bb.heightAplify) / bb.sprite:getHeight())
+        end
+    end
+end
+
+function engine.sortDistance(inputTable)
+    local sorted = {}
+
+    local copy = {}
+    for i = 1, #inputTable do
+        table.insert(copy, inputTable[i])
+    end
+
+    for j = 1, #copy do
+        local maxValue = copy[1].distance
+        local maxIndex = 1
+        for i = 1, #copy do
+            if maxValue < copy[i].distance then
+                maxValue = copy[i].distance
+                maxIndex = i
+            end
+        end
+        table.insert(sorted, copy[maxIndex])
+        table.remove(copy, maxIndex)
+    end
+
+    return sorted
 end
 
 return engine
