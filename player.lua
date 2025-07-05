@@ -25,12 +25,14 @@ function player.render2D()
     local tileX = math.floor(player.x / map.block2DSize)
     local tileY = math.floor(player.y / map.block2DSize)
 
-    love.graphics.setColor(colors.yellow)
-    love.graphics.rectangle("fill", (((tileX) * map.block2DSize) / 3) - 3, (((tileY) * map.block2DSize) / 3) - 3, (map.block2DSize / 3) - 3, (map.block2DSize / 3) - 3)
-    --love.graphics.line((tileX * map.block2DSize / 3) + (player.size / 6), (tileY * map.block2DSize / 3) + (player.size / 6), (tileX * map.block2DSize / 3) + (math.cos(math.rad(player.angleDeg)) * 20), (tileY * map.block2DSize / 3) + (math.sin(math.rad(player.angleDeg)) * 20))
+    local blockSizeX = map.miniMapSize / map.lenght
+    local blockSizeY = map.miniMapSize / map.height
 
-    local startX = (tileX * map.block2DSize / 3) + (player.size / 6)
-    local startY = (tileY * map.block2DSize / 3) + (player.size / 6)
+    love.graphics.setColor(colors.yellow)
+    love.graphics.rectangle("fill", (tileX) * blockSizeX + 3, (tileY) * blockSizeY + 3, blockSizeX - 3, blockSizeY - 3)    --love.graphics.line((tileX * map.block2DSize / 3) + (player.size / 6), (tileY * map.block2DSize / 3) + (player.size / 6), (tileX * map.block2DSize / 3) + (math.cos(math.rad(player.angleDeg)) * 20), (tileY * map.block2DSize / 3) + (math.sin(math.rad(player.angleDeg)) * 20))
+
+    local startX = ((tileX - 1) * blockSizeX) + (player.size)
+    local startY = ((tileY - 1) * blockSizeY) + (player.size)
     local endX = startX + math.cos(math.rad(player.angleDeg)) * 20
     local endY = startY + math.sin(math.rad(player.angleDeg)) * 20
 
