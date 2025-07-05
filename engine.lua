@@ -75,9 +75,9 @@ function engine.raycast(angleDeg)
 
                 local screenX = (relativeAngle + halfFOV) / player.fov * player.game.width
 
-                love.graphics.setColor(1,1,1)
+                love.graphics.setColor(colors.white)
                 local heightOffset = bb.z * size / bb.sprite:getHeight()
-                love.graphics.draw(bb.sprite, screenX - size / 2, player.game.height / 2 - size / 2 - heightOffset, 0, size / bb.sprite:getWidth(), size / bb.sprite:getHeight())
+                love.graphics.draw(bb.sprite, screenX - (size * bb.widthAplify) / 2, player.game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / bb.sprite:getWidth(), (size* bb.heightAplify) / bb.sprite:getHeight())
             end
         end
 
@@ -138,7 +138,7 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX)
             col = col - 25
         end
 
-        adjCol = {math.floor(((colors.wall[1] * 255) + col) / darkFactor), colors.wall[2], math.floor(((colors.wall[2] * 255) + col) / darkFactor)}
+        adjCol = {math.floor(((colors.wall[1] * 255) + col) / darkFactor), math.floor(((colors.wall[2] * 255) + col) / darkFactor), math.floor(((colors.wall[2] * 255) + col) / darkFactor)}
         if textures.wall.texture[texY + 1][texX + 1] == 1 then
             love.graphics.setColor(adjCol[1] / 255, adjCol[2] / 255, adjCol[3] / 255)
             love.graphics.rectangle("fill", i * width, yPos, width, 1)

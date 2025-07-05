@@ -21,9 +21,9 @@ function map.draw2D()
     for y = 1, map.height do
         for x = 1, map.lenght do
             if map.map[(y - 1) * map.lenght + x] == 1 then
-                love.graphics.setColor(0.3,0.3,.3)
+                love.graphics.setColor(colors.gray)
             else
-                love.graphics.setColor(1,1,1)
+                love.graphics.setColor(colors.white)
             end
             love.graphics.rectangle("fill", (((x - 1) * map.block2DSize) / 3) - 3, (((y - 1) * map.block2DSize) / 3) - 3, (map.block2DSize / 3) - 3, (map.block2DSize / 3) - 3)
         end

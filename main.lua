@@ -1,6 +1,8 @@
 love = require("love")
 
 function love.load()
+    love.graphics.setDefaultFilter("nearest", "nearest")
+    
     player = require("player")
     engine = require("engine")
     degMath = require("degMath")
@@ -23,11 +25,12 @@ function love.draw()
     map.draw2D()
     player.render2D()
     player.renderGun()
+    player.renderCrosshair()
 
     if player.game.debug then
         player.checkWall(player.x, player.y)
 
-        love.graphics.setColor(0, 0, 0)
+        love.graphics.setColor(colors.black)
         love.graphics.print(love.timer.getFPS(), 0, 0)
     end
 end

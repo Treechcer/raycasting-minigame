@@ -6,7 +6,7 @@ projectile = {
     gun = {
         speed = 200,
         dmg = 20,
-        sprite = spriteLoad.gun,
+        sprite = spriteLoad.guy,
         projectiles = {} -- will have everyring from bilboarding + index that'll be where it's stored in bilboarding + angle
     },
 }
@@ -14,12 +14,12 @@ projectile = {
 function projectile.create(projectileType)
     local angleRad = math.rad(player.angleDeg)
     
-    local forwardX = math.cos(angleRad) * 30
-    local forwardY = math.sin(angleRad) * 30
+    local forwardX = math.cos(angleRad) * 5
+    local forwardY = math.sin(angleRad) * 5
 
-    bilboarding.createBilboard(projectileType.sprite, player.x + forwardX, player.y + forwardY, 0)
+    bilboarding.createBilboard(projectileType.sprite, player.x + forwardX, player.y + forwardY, 0, 0.5, 0.5)
     local index = #bilboarding
-    local tempTable = {x = player.x, y = player.y, z = 0, id = index, angleDeg = player.angleDeg}
+    local tempTable = {x = player.x + forwardX, y = player.y + forwardY, z = 0, id = index, angleDeg = player.angleDeg}
 
     table.insert(projectileType.projectiles, tempTable)
 end
@@ -48,16 +48,20 @@ function projectile.move(dt)
         end
     end
 
-    for i = #toRemove, 1, -1 do
+    for i = 1, #toRemove do
         projectile.destroy(toRemove[i][1], toRemove[i][2])
     end
 end
 
 function projectile.destroy(proj, index)
-    for i = index, #proj do
-        proj[i].id = proj[i].id - 1
-    end
     table.remove(bilboarding, proj[index].id)
+    
+    for i = index, #proj do
+        if proj[i].id > proj[index].id then
+            proj[i].id = proj[i].id - 1
+        end
+    end
+
     table.remove(proj, index)
 end
 
