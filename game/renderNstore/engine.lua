@@ -1,8 +1,9 @@
 engine = {}
 
-local colors = require("colors")
+local colors = require("UINreletad.colors")
 local textures = require("sprites.texture")
-local bilboarding = require("bilboarding")
+local bilboarding = require("game.renderNstore.bilboarding")
+local game = require("game.properties.game")
 
 function engine.raycast(angleDeg)
     local posX = player.x / map.block2DSize
@@ -196,11 +197,11 @@ function engine.drawBilboarding()
         local halfFOV = player.fov / 2
         if math.abs(relativeAngle) < halfFOV and not isBlocked(player.x, player.y, bb.x, bb.y) then
             local size = 3000 / dist
-            local screenX = (relativeAngle + halfFOV) / player.fov * player.game.width
+            local screenX = (relativeAngle + halfFOV) / player.fov * game.width
 
             love.graphics.setColor(colors.white)
             local heightOffset = bb.z * size / bb.sprite:getHeight()
-            love.graphics.draw(bb.sprite, screenX - (size * bb.widthAplify) / 2, player.game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / bb.sprite:getWidth(), (size * bb.heightAplify) / bb.sprite:getHeight())
+            love.graphics.draw(bb.sprite, screenX - (size * bb.widthAplify) / 2, game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / bb.sprite:getWidth(), (size * bb.heightAplify) / bb.sprite:getHeight())
         end
     end
 end

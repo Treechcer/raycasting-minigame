@@ -3,14 +3,14 @@ love = require("love")
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     
-    player = require("player")
-    engine = require("engine")
-    degMath = require("degMath")
-    map = require("map")
-    settings = require("settings")
-    colors = require("colors")
+    player = require("game.properties.player")
+    engine = require("game.renderNstore.engine")
+    degMath = require("math.degMath")
+    map = require("game.properties.map")
+    settings = require("UINreletad.settings")
+    colors = require("UINreletad.colors")
     spriteLoad = require("sprites.spriteLoad")
-    projectile = require("projectile")
+    projectile = require("game.renderNstore.projectile")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 end
@@ -27,7 +27,7 @@ function love.draw()
     player.renderGun()
     player.renderCrosshair()
 
-    if player.game.debug then
+    if game.debug then
         player.checkWall(player.x, player.y)
 
         love.graphics.setColor(colors.black)

@@ -6,19 +6,13 @@ player = {
     size = 30,
     fov = 90,
 
-    game = {
-        debug = false,
-        width = love.graphics.getWidth(),
-        height = love.graphics.getHeight()
-    },
-
     weaponHeight = 0,
     weaponWidth = 0,
     gunNumDeg = 0,
     shootCooldown = 10000 -- makes it that player can shoot, because of course the cooldown won¨t be more like 1s or whatever... yes this number is in seconds
 }
 
-local map = require("map")
+local map = require("game.properties.map")
 local spriteLoad = require("sprites.spriteLoad")
 
 function player.render2D()
@@ -51,7 +45,7 @@ function player.checkWall(x, y)
 
             local index = tileY * map.lenght + tileX + 1
 
-            if player.game.debug then
+            if game.debug then
                 love.graphics.print(map.map[index], 150, 0) 
             end
 
@@ -72,7 +66,7 @@ end
 
 function player.renderCrosshair()
     love.graphics.setColor(colors.crosshair)
-    love.graphics.rectangle("fill", player.game.width / 2, player.game.height / 2, 5, 5)
-end 
+    love.graphics.rectangle("fill", game.width / 2, game.height / 2, 5, 5)
+end
 
 return player

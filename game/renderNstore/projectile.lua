@@ -1,6 +1,6 @@
 local spriteLoad = require("sprites.spriteLoad")
-local bilboarding = require("bilboarding")
-local map = require("map")
+local bilboarding = require("game.renderNstore.bilboarding")
+local map = require("game.properties.map")
 
 projectile = {
     gun = {
