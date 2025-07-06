@@ -36,6 +36,7 @@ function love.draw()
 end
 
 function love.update(dt)
+    player.angleMovDeg = 0
     local moveSpeed = player.speed * dt
     local angleRad = math.rad(player.angleDeg)
 
@@ -49,9 +50,11 @@ function love.update(dt)
     if love.keyboard.isDown("a") then
         moveX = moveX - sideX
         moveY = moveY - sideY
+        player.angleMovDeg = -19.5
     elseif love.keyboard.isDown("d") then
         moveX = moveX + sideX
         moveY = moveY + sideY
+        player.angleMovDeg = 19.5
     end
 
     if love.keyboard.isDown("w") then

@@ -19,7 +19,7 @@ function projectile.create(projectileType)
 
     bilboarding.createBilboard(projectileType.sprite, player.x + forwardX, player.y + forwardY, 0, 0.5, 0.5)
     local index = #bilboarding
-    local tempTable = {x = player.x + forwardX, y = player.y + forwardY, z = 0, id = index, angleDeg = player.angleDeg}
+    local tempTable = {x = player.x + forwardX, y = player.y + forwardY, z = 0, id = index, angleDeg = player.angleDeg + player.angleMovDeg}
 
     table.insert(projectileType.projectiles, tempTable)
 end
@@ -54,15 +54,17 @@ function projectile.move(dt)
 end
 
 function projectile.destroy(proj, index)
-    table.remove(bilboarding, proj[index].id)
-    
-    for i = index, #proj do
-        if proj[i].id > proj[index].id then
-            proj[i].id = proj[i].id - 1
-        end
-    end
+    if proj[index] then
+        table.remove(bilboarding, proj[index].id)
 
-    table.remove(proj, index)
+        for i = index, #proj do
+            if proj[i].id > proj[index].id then
+                proj[i].id = proj[i].id - 1
+            end
+        end
+
+        table.remove(proj, index)
+    end
 end
 
 return projectile

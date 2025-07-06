@@ -78,6 +78,7 @@ function engine.raycast(angleDeg)
 end
 
 function engine.castRay()
+    engine.drawFloor()
     local rayCount = player.fov
     local fov = player.fov
     local screenWidth = 800
@@ -228,6 +229,10 @@ function engine.sortDistance(inputTable)
     end
 
     return sorted
+end
+
+function engine.drawFloor()
+
 end
 
 return engine
