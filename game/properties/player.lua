@@ -50,7 +50,7 @@ function player.checkWall(x, y)
                 love.graphics.print(map.map[index], 150, 0) 
             end
 
-            if map.map[index] == 1 then
+            if map.map[index] >= 1 then
                 return false
             end
         end

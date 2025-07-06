@@ -5,8 +5,8 @@ map = {
     map = {
         1,1,1,1,1,1,1,1,
         1,0,0,0,0,0,0,1,
-        1,0,0,1,0,0,0,1,
-        1,0,1,1,1,0,0,1,
+        2,0,0,1,0,0,0,1,
+        3,0,1,1,1,0,0,1,
         1,0,0,1,0,0,0,1,
         1,0,0,0,0,1,0,1,
         1,0,0,0,1,1,1,1,
@@ -24,7 +24,7 @@ function map.draw2D()
     
     for y = 1, map.height do
         for x = 1, map.lenght do
-            if map.map[(y - 1) * map.lenght + x] == 1 then
+            if map.map[(y - 1) * map.lenght + x] >= 1 then
                 love.graphics.setColor(colors.gray)
             else
                 love.graphics.setColor(colors.white)

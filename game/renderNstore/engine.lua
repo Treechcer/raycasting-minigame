@@ -6,6 +6,8 @@ local bilboarding = require("game.renderNstore.bilboarding")
 local game = require("game.properties.game")
 
 function engine.raycast(angleDeg)
+    local num = 0
+
     local posX = player.x / map.block2DSize
     local posY = player.y / map.block2DSize
 
@@ -56,7 +58,8 @@ function engine.raycast(angleDeg)
         end
 
         local index = mapY * map.lenght + mapX + 1
-        if map.map[index] == 1 then
+        if map.map[index] >= 1 then
+            num = map.map[index]
             hit = true
         end
     end
@@ -74,7 +77,7 @@ function engine.raycast(angleDeg)
 
     local distance = perpWallDist * map.block2DSize
     local height = 10000 / distance
-    return distance, height, side, wallX
+    return distance, height, side, wallX, num
 end
 
 function engine.castRay()
@@ -86,14 +89,14 @@ function engine.castRay()
 
     for i = 0, rayCount - 1 do
         local rayAngle = player.angleDeg - (fov / 2) + (i * (fov / rayCount))
-        local dist, height, side, wallX = engine.raycast(rayAngle)
-        engine.wallDraw(i, dist, height, sliceWidth, 10, side, wallX)
+        local dist, height, side, wallX, num = engine.raycast(rayAngle)
+        engine.wallDraw(i, dist, height, sliceWidth, 10, side, wallX, num)
     end
 
     engine.drawBilboarding()
 end
 
-function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX)
+function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX, num)
     local texX = math.floor(wallX * textures.wall.size)
     texX = math.max(0, math.min(textures.wall.size - 1, texX))
     local darkFactor = 1 + (distance/50)
@@ -116,7 +119,7 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX)
         end
 
         adjCol = {math.floor(((colors.wall[1] * 255) + col) / darkFactor), math.floor(((colors.wall[2] * 255) + col) / darkFactor), math.floor(((colors.wall[2] * 255) + col) / darkFactor)}
-        if textures.wall.texture[texY + 1][texX + 1] == 1 then
+        if textures.wall.texture[texY + ((num - 1) * textures.wall.size) + 1][texX + 1] >= 1 then
             love.graphics.setColor(adjCol[1] / 255, adjCol[2] / 255, adjCol[3] / 255)
             love.graphics.rectangle("fill", i * width, yPos, width, 1)
         else
@@ -132,7 +135,7 @@ end
 function isBlocked(x0, y0, x1, y1) -- small checker if between two points (in X,Y) is or is not wall, now only for bilboarding
     local mapX0 = math.floor(x0 / map.block2DSize)
     local mapY0 = math.floor(y0 / map.block2DSize)
-    if map.map[mapY0 * map.lenght + mapX0 + 1] == 1 then
+    if map.map[mapY0 * map.lenght + mapX0 + 1] >= 1 then
         return true
     end
 
@@ -157,7 +160,7 @@ function isBlocked(x0, y0, x1, y1) -- small checker if between two points (in X,
             return false
         end
 
-        if map.map[mapY * map.lenght + mapX + 1] == 1 then
+        if map.map[mapY * map.lenght + mapX + 1] >= 1 then
             return true
         end
     end

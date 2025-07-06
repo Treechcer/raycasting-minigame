@@ -40,7 +40,7 @@ function projectile.move(dt)
                 local tileX = math.floor(projectile[key].projectiles[index].x / map.block2DSize)
                 local tileY = math.floor(projectile[key].projectiles[index].y / map.block2DSize)
 
-                if map.map[tileY * map.lenght + tileX + 1] == 1 then
+                if map.map[tileY * map.lenght + tileX + 1] >= 1 then
                     --projectile.destroy(projectile[key].projectiles, index)
                     table.insert(toRemove, {projectile[key].projectiles, index})
                 end
