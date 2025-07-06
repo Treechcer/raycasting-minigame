@@ -1,3 +1,5 @@
+local color = require("UINreletad.colors")
+
 textures = {
     wall = {
         size = 8,
@@ -34,6 +36,11 @@ textures = {
         {1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1},
+        },
+        color = {
+            color.black,
+            color.wall,
+            color.white
         }
     },
 

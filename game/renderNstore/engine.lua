@@ -118,9 +118,10 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
             col = col - 25
         end
 
-        adjCol = {math.floor(((colors.wall[1] * 255) + col) / darkFactor), math.floor(((colors.wall[2] * 255) + col) / darkFactor), math.floor(((colors.wall[2] * 255) + col) / darkFactor)}
-        if textures.wall.texture[texY + ((num - 1) * textures.wall.size) + 1][texX + 1] >= 1 then
-            love.graphics.setColor(adjCol[1] / 255, adjCol[2] / 255, adjCol[3] / 255)
+        adjCol = {math.floor(((textures.wall.color[num][1] * 255) + col) / darkFactor), math.floor(((textures.wall.color[num][2] * 255) + col) / darkFactor), math.floor(((textures.wall.color[num][2] * 255) + col) / darkFactor)}
+        local temp = textures.wall.texture[texY + ((num - 1) * textures.wall.size) + 1][texX + 1]
+        if temp > 0 then
+            love.graphics.setColor((adjCol[1] / temp) / 255, (adjCol[2] / temp) / 255, (adjCol[3] / temp) / 255)
             love.graphics.rectangle("fill", i * width, yPos, width, 1)
         else
             for y = 1, 3 do

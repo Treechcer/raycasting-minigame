@@ -4,7 +4,7 @@ colors = {
     ceiling = {0.15, 0.2, 0.3},
     crosshair = {1,0,1},
     white = {1,1,1},
-    yellow = {0.8, 0.8, 0},
+    yellow = {1, 1, 0},
     black = {0, 0, 0},
     gray = {0.3,0.3,.3}
 }
