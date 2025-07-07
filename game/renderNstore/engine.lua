@@ -117,18 +117,19 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
         if side == 0 then
             col = col - 25
         end
-
-        adjCol = {math.floor(((textures.wall.color[num][1] * 255) + col) / darkFactor), math.floor(((textures.wall.color[num][2] * 255) + col) / darkFactor), math.floor(((textures.wall.color[num][2] * 255) + col) / darkFactor)}
-        local temp = textures.wall.texture[texY + ((num - 1) * textures.wall.size) + 1][texX + 1]
-        if temp > 0 then
-            love.graphics.setColor((adjCol[1] / temp) / 255, (adjCol[2] / temp) / 255, (adjCol[3] / temp) / 255)
-            love.graphics.rectangle("fill", i * width, yPos, width, 1)
-        else
-            for y = 1, 3 do
-                adjCol[y] = (adjCol[y] + 50) / 255
-            end
-                love.graphics.setColor(adjCol[1],adjCol[2],adjCol[3])
+        if num ~= 0 then
+            adjCol = {math.floor(((textures.wall.color[num][1] * 255) + col) / darkFactor), math.floor(((textures.wall.color[num][2] * 255) + col) / darkFactor), math.floor(((textures.wall.color[num][3] * 255) + col) / darkFactor)}
+            local temp = textures.wall.texture[texY + ((num - 1) * textures.wall.size) + 1][texX + 1]
+            if temp > 0 then
+                love.graphics.setColor((adjCol[1] / temp) / 255, (adjCol[2] / temp) / 255, (adjCol[3] / temp) / 255)
                 love.graphics.rectangle("fill", i * width, yPos, width, 1)
+            else
+                for y = 1, 3 do
+                    adjCol[y] = (adjCol[y] + 50) / 255
+                end
+                    love.graphics.setColor(adjCol[1],adjCol[2],adjCol[3])
+                    love.graphics.rectangle("fill", i * width, yPos, width, 1)
+            end
         end
     end
 end

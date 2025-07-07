@@ -24,10 +24,10 @@ function player.render2D()
     local blockSizeY = map.miniMapSize / map.height
 
     love.graphics.setColor(colors.yellow)
-    love.graphics.rectangle("fill", (tileX) * blockSizeX + 3, (tileY) * blockSizeY + 3, blockSizeX - 3, blockSizeY - 3)    --love.graphics.line((tileX * map.block2DSize / 3) + (player.size / 6), (tileY * map.block2DSize / 3) + (player.size / 6), (tileX * map.block2DSize / 3) + (math.cos(math.rad(player.angleDeg)) * 20), (tileY * map.block2DSize / 3) + (math.sin(math.rad(player.angleDeg)) * 20))
+    love.graphics.rectangle("fill", (tileX) * blockSizeX + 2, (tileY) * blockSizeY + 2, blockSizeX - 2, blockSizeY - 2)    --love.graphics.line((tileX * map.block2DSize / 3) + (player.size / 6), (tileY * map.block2DSize / 3) + (player.size / 6), (tileX * map.block2DSize / 3) + (math.cos(math.rad(player.angleDeg)) * 20), (tileY * map.block2DSize / 3) + (math.sin(math.rad(player.angleDeg)) * 20))
 
-    local startX = ((tileX - 1) * blockSizeX) + (player.size)
-    local startY = ((tileY - 1) * blockSizeY) + (player.size)
+    local startX = ((tileX + 1) * blockSizeX - player.size / blockSizeX)
+    local startY = ((tileY + 1) * blockSizeY - player.size / blockSizeY)
     local endX = startX + math.cos(math.rad(player.angleDeg)) * 20
     local endY = startY + math.sin(math.rad(player.angleDeg)) * 20
 

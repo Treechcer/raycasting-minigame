@@ -39,8 +39,8 @@ textures = {
         },
         color = {
             color.black,
-            color.wall,
-            color.white
+            color.crosshair,
+            color.floor,
         }
     },
 

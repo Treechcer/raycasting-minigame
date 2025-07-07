@@ -11,11 +11,25 @@ function love.load()
     colors = require("UINreletad.colors")
     spriteLoad = require("sprites.spriteLoad")
     projectile = require("game.renderNstore.projectile")
+    noise = require("math.noise")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
+
+    map.random()
 end
 
 function love.draw()
+
+    --[[t = noise.generateMap()
+    x = 0
+    y = 0
+    for y = 1, #t do
+        for x = 1, #t[y] do
+            love.graphics.setColor(t[y][x], t[y][x], t[y][x])
+            love.graphics.rectangle("fill", x * 30,  y * 30, 30, 30)
+        end 
+    end]]
+
     love.graphics.setBackgroundColor(colors.ceiling)
 
     love.graphics.setColor(colors.floor)
