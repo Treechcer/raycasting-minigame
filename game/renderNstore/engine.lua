@@ -7,7 +7,7 @@ local game = require("game.properties.game")
 
 function engine.raycast(angleDeg)
     local DOF = 0
-    local viewDistance = 3
+    local viewDistance = 2
 
     local num = 0
 

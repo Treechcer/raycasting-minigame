@@ -13,7 +13,7 @@ map = {
         1,0,0,0,0,0,0,0,
     },
 
-    miniMapSize = 300 --it's a square
+    miniMapSize = 200  --it's a square
 }
 
 map.surface = map.height * map.lenght
