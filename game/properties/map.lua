@@ -59,6 +59,8 @@ function map.random()
         end
     end
 
+    map.map[2 + map.lenght] = 0
+
     --[[for l = 1, #map.map do
         print(map.map[l])
     end]]

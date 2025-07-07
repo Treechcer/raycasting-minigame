@@ -6,6 +6,9 @@ local bilboarding = require("game.renderNstore.bilboarding")
 local game = require("game.properties.game")
 
 function engine.raycast(angleDeg)
+    local DOF = 0
+    local viewDistance = 3
+
     local num = 0
 
     local posX = player.x / map.block2DSize
@@ -44,10 +47,12 @@ function engine.raycast(angleDeg)
     local side
     while not hit do
         if sideDistX < sideDistY then
+            DOF = sideDistX
             sideDistX = sideDistX + deltaDistX
             mapX = mapX + stepX
             side = 0
         else
+            DOF = sideDistY
             sideDistY = sideDistY + deltaDistY
             mapY = mapY + stepY
             side = 1
@@ -61,6 +66,12 @@ function engine.raycast(angleDeg)
         if map.map[index] >= 1 then
             num = map.map[index]
             hit = true
+        end
+
+        if DOF >= viewDistance then
+            hit = true
+            num = 0
+            break
         end
     end
 
@@ -100,6 +111,7 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
     local texX = math.floor(wallX * textures.wall.size)
     texX = math.max(0, math.min(textures.wall.size - 1, texX))
     local darkFactor = 1 + (distance/50)
+    local adjCol = {}
 
     for j = 0, height - 1 do
         local texY = math.min(textures.wall.size - 1, math.floor(j * textures.wall.size / height))
@@ -113,23 +125,28 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
         else
             col = 0
         end
-
         if side == 0 then
             col = col - 25
         end
+
+        local temp = 0
+
         if num ~= 0 then
             adjCol = {math.floor(((textures.wall.color[num][1] * 255) + col) / darkFactor), math.floor(((textures.wall.color[num][2] * 255) + col) / darkFactor), math.floor(((textures.wall.color[num][3] * 255) + col) / darkFactor)}
-            local temp = textures.wall.texture[texY + ((num - 1) * textures.wall.size) + 1][texX + 1]
-            if temp > 0 then
-                love.graphics.setColor((adjCol[1] / temp) / 255, (adjCol[2] / temp) / 255, (adjCol[3] / temp) / 255)
-                love.graphics.rectangle("fill", i * width, yPos, width, 1)
-            else
-                for y = 1, 3 do
-                    adjCol[y] = (adjCol[y] + 50) / 255
-                end
-                    love.graphics.setColor(adjCol[1],adjCol[2],adjCol[3])
-                    love.graphics.rectangle("fill", i * width, yPos, width, 1)
+            temp = textures.wall.texture[texY + ((num - 1) * textures.wall.size) + 1][texX + 1]
+        else
+            adjCol = {math.floor(((colors.black[1] * 255) + col) / darkFactor), math.floor(((colors.black[2] * 255) + col) / darkFactor), math.floor(((colors.black[3] * 255) + col) / darkFactor)}
+        end
+
+        if temp > 0 then
+            love.graphics.setColor((adjCol[1] / temp) / 255, (adjCol[2] / temp) / 255, (adjCol[3] / temp) / 255)
+            love.graphics.rectangle("fill", i * width, yPos, width, 1)
+        else
+            for y = 1, 3 do
+                adjCol[y] = (adjCol[y] + 50) / 255
             end
+            love.graphics.setColor(adjCol[1],adjCol[2],adjCol[3])
+            love.graphics.rectangle("fill", i * width, yPos, width, 1)
         end
     end
 end
@@ -220,7 +237,9 @@ function engine.sortDistance(inputTable)
         table.insert(copy, inputTable[i])
     end
 
-    for j = 1, #copy do
+    table.sort(copy, function (a, b) return a.distance > b.distance end)
+
+    --[[for j = 1, #copy do
         local maxValue = copy[1].distance
         local maxIndex = 1
         for i = 1, #copy do
@@ -231,9 +250,9 @@ function engine.sortDistance(inputTable)
         end
         table.insert(sorted, copy[maxIndex])
         table.remove(copy, maxIndex)
-    end
+    end]]
 
-    return sorted
+    return copy
 end
 
 function engine.drawFloor()
