@@ -10,7 +10,11 @@ player = {
     weaponHeight = 0,
     weaponWidth = 0,
     gunNumDeg = 0,
-    shootCooldown = 10000 -- makes it that player can shoot, because of course the cooldown won¨t be more like 1s or whatever... yes this number is in seconds
+    shootCooldown = 10000, -- makes it that player can shoot, because of course the cooldown won¨t be more like 1s or whatever... yes this number is in seconds
+    
+    equipedGunSlot = 1,
+    gunSlots = {"gun", "pickaxe", "granade"},
+    scrollCooldown = 10000,
 }
 
 local map = require("game.properties.map")
@@ -24,10 +28,10 @@ function player.render2D()
     local blockSizeY = map.miniMapSize / map.height
 
     love.graphics.setColor(colors.yellow)
-    love.graphics.rectangle("fill", (tileX) * blockSizeX + 2, (tileY) * blockSizeY + 2, blockSizeX - 2, blockSizeY - 2)    --love.graphics.line((tileX * map.block2DSize / 3) + (player.size / 6), (tileY * map.block2DSize / 3) + (player.size / 6), (tileX * map.block2DSize / 3) + (math.cos(math.rad(player.angleDeg)) * 20), (tileY * map.block2DSize / 3) + (math.sin(math.rad(player.angleDeg)) * 20))
+    love.graphics.rectangle("fill", (tileX) * blockSizeX + 1, (tileY) * blockSizeY + 1, blockSizeX - 1, blockSizeY - 1)    --love.graphics.line((tileX * map.block2DSize / 3) + (player.size / 6), (tileY * map.block2DSize / 3) + (player.size / 6), (tileX * map.block2DSize / 3) + (math.cos(math.rad(player.angleDeg)) * 20), (tileY * map.block2DSize / 3) + (math.sin(math.rad(player.angleDeg)) * 20))
 
-    local startX = ((tileX + 1) * blockSizeX - player.size / blockSizeX)
-    local startY = ((tileY + 1) * blockSizeY - player.size / blockSizeY)
+    local startX = ((tileX + 2) * blockSizeX - player.size / blockSizeX)
+    local startY = ((tileY + 2) * blockSizeY - player.size / blockSizeY)
     local endX = startX + math.cos(math.rad(player.angleDeg)) * 20
     local endY = startY + math.sin(math.rad(player.angleDeg)) * 20
 
@@ -62,12 +66,18 @@ end
 function player.renderGun()
     love.graphics.setColor(colors.white)
     width, height = love.graphics.getDimensions()
-    love.graphics.draw(spriteLoad.gun, width / 3 + player.weaponWidth, height / 1.3 + player.weaponHeight, 0, 0.5, 0.5)
+    local tempPath = player.gunSlots[player.equipedGunSlot]
+    love.graphics.draw(spriteLoad[tempPath], width / 3 + player.weaponWidth, height / 1.3 + player.weaponHeight, 0, 0.5, 0.5)
 end
 
 function player.renderCrosshair()
     love.graphics.setColor(colors.crosshair)
     love.graphics.rectangle("fill", game.width / 2, game.height / 2, 5, 5)
+end
+
+function player.cooldwonChange(dt)
+    player.shootCooldown = player.shootCooldown + dt
+    player.scrollCooldown = player.scrollCooldown + dt
 end
 
 return player

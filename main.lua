@@ -20,14 +20,18 @@ end
 
 function love.draw()
 
-    --[[t = noise.generateMap()
-    x = 0
-    y = 0
-    for y = 1, #t do
-        for x = 1, #t[y] do
-            love.graphics.setColor(t[y][x], t[y][x], t[y][x])
-            love.graphics.rectangle("fill", x * 30,  y * 30, 30, 30)
-        end 
+    --[[map.random()
+
+    t = noise.generateMap()
+    x = 1
+    y = 1
+    for i = 1, #t do
+        local x = ((i - 1) % map.lenght)
+        local y = math.floor((i - 1) / map.lenght)
+        local value = t[i]
+
+        love.graphics.setColor(value, value, value)
+        love.graphics.rectangle("fill", x * 5, y * 5, 5, 5)
     end]]
 
     love.graphics.setBackgroundColor(colors.ceiling)
@@ -107,7 +111,7 @@ function love.update(dt)
         player.shootCooldown = 0
     end
 
-    player.shootCooldown = player.shootCooldown + dt
+    player.cooldwonChange(dt)
     projectile.move(dt)
 
     --[[
@@ -185,4 +189,18 @@ function love.mousemoved(x, y, dx, dy)
     player.angleDeg = degMath.fixDeg(player.angleDeg)
 
     love.mouse.setX(dx)
+end
+
+function love.wheelmoved(x, y)
+    if y > 0 and player.scrollCooldown >= 0.5 then
+        if player.equipedGunSlot < #player.gunSlots then
+            player.scrollCooldown = 0
+            player.equipedGunSlot = player.equipedGunSlot + 1
+        end
+    elseif y < 0 and player.scrollCooldown >= 0.5 then
+        if player.equipedGunSlot > 1 then
+            player.scrollCooldown = 0
+            player.equipedGunSlot = player.equipedGunSlot - 1
+        end
+    end
 end

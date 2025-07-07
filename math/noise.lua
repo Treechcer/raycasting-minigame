@@ -1,4 +1,5 @@
 local map = require("game.properties.map")
+local bit = require("bit")
 
 noise = {
     seed = os.time(),
@@ -40,7 +41,12 @@ function noise.generation(x, y)
 end
 
 function noise.ran(x,y)
-    return math.sin(x * 10.5476546876 + y * 70.454645374453734 + noise.seed) % 1
+    local result = x * 8660254037 + y * 20194423349 + noise.seed * 30000101111
+    result = bit.band(result, 0xffffffff) -- making it 32b number
+    result = bit.bxor(result, bit.rshift(result, 13))
+    result = bit.band(result * 1274126177, 0xffffffff)
+    result = bit.bxor(result, bit.rshift(result, 16))
+    return bit.band(result, 0x7fffffff) / 0x7fffffff
 end
 
 function noise.lerp(a,b,t)

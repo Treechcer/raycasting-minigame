@@ -1,6 +1,6 @@
 map = {
-    lenght = 15,
-    height = 15,
+    lenght = 64,
+    height = 64,
     block2DSize = 64,
     map = {
         1,1,1,1,1,1,1,0,
@@ -13,14 +13,14 @@ map = {
         1,0,0,0,0,0,0,0,
     },
 
-    miniMapSize = 150 --it's a square
+    miniMapSize = 300 --it's a square
 }
 
 map.surface = map.height * map.lenght
 
 function map.draw2D()
     love.graphics.setColor(colors.black)
-    love.graphics.rectangle("fill", 0, 0, map.miniMapSize + 3, map.miniMapSize + 3)
+    love.graphics.rectangle("fill", 0, 0, map.miniMapSize + 1, map.miniMapSize + 1)
     
     for y = 1, map.height do
         for x = 1, map.lenght do
@@ -32,7 +32,7 @@ function map.draw2D()
             local blockSizeX = map.miniMapSize / map.lenght
             local blockSizeY = map.miniMapSize / map.height
 
-            love.graphics.rectangle("fill", (x - 1) * blockSizeX + 3, (y - 1) * blockSizeY + 3, blockSizeX - 3, blockSizeY - 3)
+            love.graphics.rectangle("fill", (x - 1) * blockSizeX + 1, (y - 1) * blockSizeY + 1, blockSizeX - 1, blockSizeY - 1)
         end
     end
 end
