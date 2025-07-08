@@ -7,7 +7,7 @@ local game = require("game.properties.game")
 
 function engine.raycast(angleDeg)
     local DOF = 0
-    local viewDistance = 2
+    local viewDistance = 5
 
     local num = 0
 
@@ -151,7 +151,7 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
     end
 end
 
-function isBlocked(x0, y0, x1, y1) -- small checker if between two points (in X,Y) is or is not wall, now only for bilboarding
+function engine.isBlocked(x0, y0, x1, y1) -- small checker if between two points (in X,Y) is or is not wall, now only for bilboarding
     local mapX0 = math.floor(x0 / map.block2DSize)
     local mapY0 = math.floor(y0 / map.block2DSize)
     if map.map[mapY0 * map.lenght + mapX0 + 1] >= 1 then
@@ -218,7 +218,7 @@ function engine.drawBilboarding()
         end
 
         local halfFOV = player.fov / 2
-        if math.abs(relativeAngle) < halfFOV and not isBlocked(player.x, player.y, bb.x, bb.y) then
+        if math.abs(relativeAngle) < halfFOV and not engine.isBlocked(player.x, player.y, bb.x, bb.y) then
             local size = 3000 / dist
             local screenX = (relativeAngle + halfFOV) / player.fov * game.width
 
@@ -257,6 +257,16 @@ end
 
 function engine.drawFloor()
 
+end
+
+function engine.pickaxe()
+    local rad = math.rad(player.angleDeg)
+    local x1 = player.x + math.cos(rad) * 30
+    local y1 = player.y + math.sin(rad) * 30
+    local index = math.floor(y1 / map.block2DSize) * map.lenght + math.floor(x1 / map.block2DSize) + 1
+    if engine.isBlocked(player.x, player.y, x1, y1) and map.map[index] > 1 then
+        map.map[index] = 0
+    end
 end
 
 return engine

@@ -1,0 +1,22 @@
+gunStats = {
+    gun = {
+        weaponHeight = 0.5,
+        weaponWidth = 0.5,
+        yOffset = 0,
+        xOffset = 0,
+    },
+    pickaxe = {
+        weaponHeight = 4,
+        weaponWidth = 4,
+        yOffset = -100,
+        xOffset = 0,
+    },
+    granade = {
+        weaponHeight = 0.5,
+        weaponWidth = 0.5,
+        yOffset = 0,
+        xOffset = 50,
+    },
+}
+
+return gunStats

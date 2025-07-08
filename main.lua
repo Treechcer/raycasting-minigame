@@ -12,6 +12,7 @@ function love.load()
     spriteLoad = require("sprites.spriteLoad")
     projectile = require("game.renderNstore.projectile")
     noise = require("math.noise")
+    gunStats = require("game.properties.gunStats")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 
@@ -107,7 +108,11 @@ function love.update(dt)
 
     if love.keyboard.isDown("space") and player.shootCooldown >= 0.5 then
         --bilboarding.createBilboard(spriteLoad.gun, player.x, player.y, -600)
-        projectile.create(projectile.gun)
+        if player.gunSlots[player.equipedGunSlot] == "gun" then
+            projectile.create(projectile.gun)
+        elseif player.gunSlots[player.equipedGunSlot] == "pickaxe" then
+            engine.pickaxe()
+        end
         player.shootCooldown = 0
     end
 
