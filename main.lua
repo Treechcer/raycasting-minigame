@@ -13,6 +13,7 @@ function love.load()
     projectile = require("game.renderNstore.projectile")
     noise = require("math.noise")
     gunStats = require("game.properties.gunStats")
+    audio = require("sounds.audio")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 

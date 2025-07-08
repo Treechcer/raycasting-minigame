@@ -4,10 +4,11 @@ local colors = require("UINreletad.colors")
 local textures = require("sprites.texture")
 local bilboarding = require("game.renderNstore.bilboarding")
 local game = require("game.properties.game")
+local audio = require("sounds.audio")
 
 function engine.raycast(angleDeg)
     local DOF = 0
-    local viewDistance = 5
+    local viewDistance = player.viewDistance
 
     local num = 0
 
@@ -218,7 +219,7 @@ function engine.drawBilboarding()
         end
 
         local halfFOV = player.fov / 2
-        if math.abs(relativeAngle) < halfFOV and not engine.isBlocked(player.x, player.y, bb.x, bb.y) then
+        if math.abs(relativeAngle) < halfFOV and not engine.isBlocked(player.x, player.y, bb.x, bb.y) and bb.distance < player.viewDistance * map.block2DSize then
             local size = 3000 / dist
             local screenX = (relativeAngle + halfFOV) / player.fov * game.width
 
@@ -266,6 +267,8 @@ function engine.pickaxe()
     local index = math.floor(y1 / map.block2DSize) * map.lenght + math.floor(x1 / map.block2DSize) + 1
     if engine.isBlocked(player.x, player.y, x1, y1) and map.map[index] > 1 then
         map.map[index] = 0
+        audio.blockBreak:setPitch(1 - math.random() / 2)
+        audio.blockBreak:play()
     end
 end
 

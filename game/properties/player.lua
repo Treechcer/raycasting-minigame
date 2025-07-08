@@ -15,6 +15,8 @@ player = {
     equipedGunSlot = 1,
     gunSlots = {"gun", "pickaxe", "granade"},
     scrollCooldown = 10000,
+
+    viewDistance = 5,
 }
 
 local map = require("game.properties.map")
