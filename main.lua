@@ -14,6 +14,7 @@ function love.load()
     noise = require("math.noise")
     gunStats = require("game.properties.gunStats")
     audio = require("sounds.audio")
+    enemies = require("game.enemy.enemies")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 
@@ -66,6 +67,10 @@ function love.update(dt)
     local forwardY = math.sin(angleRad)
     local sideX = math.cos(angleRad + math.rad(90))
     local sideY = math.sin(angleRad + math.rad(90))
+    
+    if love.keyboard.isDown("e") then
+        enemies.create("small", player.x, player.y, 0)
+    end
 
     if love.keyboard.isDown("a") then
         moveX = moveX - sideX

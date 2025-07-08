@@ -6,7 +6,8 @@ colors = {
     white = {1,1,1},
     yellow = {1, 1, 0},
     black = {0, 0, 0},
-    gray = {0.3,0.3,.3}
+    gray = {0.3,0.3,.3},
+    red = {0.7, 0.1, 0.1}
 }
 
 return colors

@@ -141,14 +141,14 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
 
         if temp > 0 then
             love.graphics.setColor((adjCol[1] / temp) / 255, (adjCol[2] / temp) / 255, (adjCol[3] / temp) / 255)
-            love.graphics.rectangle("fill", i * width, yPos, width, 1)
         else
             for y = 1, 3 do
                 adjCol[y] = (adjCol[y] + 50) / 255
             end
             love.graphics.setColor(adjCol[1],adjCol[2],adjCol[3])
-            love.graphics.rectangle("fill", i * width, yPos, width, 1)
         end
+
+        love.graphics.rectangle("fill", i * width, yPos, width, 1)
     end
 end
 
