@@ -1,85 +1,86 @@
 local sprites = require("sprites.spriteLoad")
 
-enemyClass = {
-    -- this is used as template / class for all enemy types
+local enemyClass = {
     enemyTypes = {
         small = {
-            size = {
-                height = 1,
-                width = 1
-            },
-
+            size = { height = 1, width = 1 },
             attackDamage = 5,
             attacooldown = 2,
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
-
             speed = 100,
-            x = "not asighned",
-            y = "not asighned",
-            z = "not asighned",
-            id = "int_num", -- bilboarding ID because we need to traverse it
-
-            AItype = "normal", -- might implemet more AI types, might
-
+            x = "not assigned",
+            y = "not assigned",
+            z = "not assigned",
+            id = "int_num",
+            angleDeg = 50,
+            AItype = "normal",
             sprites = sprites.guy,
         },
         medium = {
-            size = {
-                height = 1.5,
-                width = 1.5
-            },
-
+            size = { height = 1.5, width = 1.5 },
             attackDamage = 5,
             attacooldown = 2,
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
-
             speed = 80,
-            x = "not asighned",
-            y = "not asighned",
-            z = "not asighned",
+            x = "not assigned",
+            y = "not assigned",
+            z = "not assigned",
             id = "int_num",
-
+            angleDeg = 50,
             AItype = "normal",
-
             sprites = sprites.guy,
         },
         big = {
-            size = {
-                height = 2,
-                width = 2
-            },
-
+            size = { height = 2, width = 2 },
             attackDamage = 5,
             attacooldown = 2,
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
-
             speed = 200,
-            x = "not asighned",
-            y = "not asighned",
-            z = "not asighned",
+            x = "not assigned",
+            y = "not assigned",
+            z = "not assigned",
             id = "int_num",
-
+            angleDeg = 50,
             AItype = "normal",
-
-            sprites = sprites.guy
+            sprites = sprites.guy,
         }
     }
 }
 
-function enemyClass.create(enemyType, x, y, z, id) -- this creates the enemy class
-    local tempTable = enemyClass.enemyTypes[enemyType]
-    tempTable.x = x
-    tempTable.y = y
-    tempTable.z = z
-    tempTable.id = id
+-- Deep copy helper
+local function deepcopy(orig)
+    local copy
+    if type(orig) == "table" then
+        copy = {}
+        for k, v in pairs(orig) do
+            copy[k] = deepcopy(v)
+        end
+        setmetatable(copy, getmetatable(orig))
+    else
+        copy = orig
+    end
+    return copy
+end
 
-    return tempTable
+-- Create enemy instance
+function enemyClass.create(enemyType, x, y, z, id)
+    local template = enemyClass.enemyTypes[enemyType]
+    if not template then
+        error("Unknown enemy type: " .. tostring(enemyType))
+    end
+
+    local enemy = deepcopy(template)
+    enemy.x = x
+    enemy.y = y
+    enemy.z = z
+    enemy.id = id
+    return enemy
 end
 
 return enemyClass
