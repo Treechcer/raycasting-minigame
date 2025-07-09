@@ -9,14 +9,16 @@ local enemyClass = {
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
+            lastMovedcCd = 0,
             speed = 100,
-            x = "not assigned",
-            y = "not assigned",
-            z = "not assigned",
+            x = "int_num",
+            y = "int_num",
+            z = "int_num",
             id = "int_num",
             angleDeg = 50,
             AItype = "normal",
             sprites = sprites.guy,
+            redLineId = "int_num"
         },
         medium = {
             size = { height = 1.5, width = 1.5 },
@@ -25,14 +27,16 @@ local enemyClass = {
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
+            lastMovedcCd = 0,
             speed = 80,
-            x = "not assigned",
-            y = "not assigned",
-            z = "not assigned",
+            x = "int_num",
+            y = "int_num",
+            z = "int_num",
             id = "int_num",
             angleDeg = 50,
             AItype = "normal",
             sprites = sprites.guy,
+            redLineId = "int_num"
         },
         big = {
             size = { height = 2, width = 2 },
@@ -41,14 +45,16 @@ local enemyClass = {
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
+            lastMovedcCd = 0,
             speed = 200,
-            x = "not assigned",
-            y = "not assigned",
-            z = "not assigned",
+            x = "int_num",
+            y = "int_num",
+            z = "int_num",
             id = "int_num",
             angleDeg = 50,
             AItype = "normal",
             sprites = sprites.guy,
+            redLineId = "int_num"
         }
     }
 }
@@ -69,7 +75,7 @@ local function deepcopy(orig)
 end
 
 -- Create enemy instance
-function enemyClass.create(enemyType, x, y, z, id)
+function enemyClass.create(enemyType, x, y, z, id, redLineId)
     local template = enemyClass.enemyTypes[enemyType]
     if not template then
         error("Unknown enemy type: " .. tostring(enemyType))
@@ -80,6 +86,7 @@ function enemyClass.create(enemyType, x, y, z, id)
     enemy.y = y
     enemy.z = z
     enemy.id = id
+    enemy.redLineId = redLineId
     return enemy
 end
 

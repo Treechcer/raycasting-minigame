@@ -204,6 +204,9 @@ function engine.drawBilboarding()
     local sortedByDistanceBilboarding = engine.sortDistance(bilboarding)
 
     for bilboardI = 1, #sortedByDistanceBilboarding do
+
+        --ong I need to add rotating bilboarding, tomorrow probably
+
         local bb = sortedByDistanceBilboarding[bilboardI]
 
         local dx = bb.x - player.x

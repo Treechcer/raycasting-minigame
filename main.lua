@@ -125,6 +125,7 @@ function love.update(dt)
     player.cooldwonChange(dt)
     projectile.move(dt)
     enemies.behavior()
+    enemies.colldown(dt)
 
     --[[
     if love.keyboard.isDown("a") then
