@@ -4,8 +4,8 @@ bilboarding = {
 
 local spriteLoad = require("sprites.spriteLoad")
 
-function bilboarding.createBilboard(spriteLocation, x, y, z, heightAplify, widthAplify)
-    table.insert(bilboarding, {sprite = spriteLocation, x = x, y = y, z = z, heightAplify = heightAplify, widthAplify = widthAplify, distance = 0})
+function bilboarding.createBilboard(sprite, x, y, z, heightAplify, widthAplify)
+    table.insert(bilboarding, {sprite = sprite, x = x, y = y, z = z, heightAplify = heightAplify, widthAplify = widthAplify, distance = 0})
 end
 
 function bilboarding.print()
@@ -14,6 +14,6 @@ function bilboarding.print()
     end
 end
 
-bilboarding.createBilboard(spriteLoad.gun, 100, 100, -600, 1, 1)
+bilboarding.createBilboard(spriteLoad.testRotation, 100, 100, -600, 1, 1)
 
 return bilboarding

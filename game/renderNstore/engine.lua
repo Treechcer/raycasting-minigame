@@ -204,16 +204,13 @@ function engine.drawBilboarding()
     local sortedByDistanceBilboarding = engine.sortDistance(bilboarding)
 
     for bilboardI = 1, #sortedByDistanceBilboarding do
-
-        --ong I need to add rotating bilboarding, tomorrow probably
-
         local bb = sortedByDistanceBilboarding[bilboardI]
 
         local dx = bb.x - player.x
         local dy = bb.y - player.y
-        local dist = math.sqrt(dx * dx + dy * dy)
         local angleToBB = math.deg(math.atan2(dy, dx))
         local relativeAngle = angleToBB - player.angleDeg
+
         while relativeAngle > 180 do
             relativeAngle = relativeAngle - 360
         end
@@ -221,17 +218,34 @@ function engine.drawBilboarding()
             relativeAngle = relativeAngle + 360
         end
 
+        local sprite
+        if type(bb.sprite) == "table" then
+            local angleRelative = relativeAngle + 180
+            local sector = degMath.fixDeg(player.angleDeg - angleRelative) / 360 * #bb.sprite
+            local spriteIndex = math.floor(sector) + 1
+            sprite = bb.sprite[spriteIndex]
+        else
+            sprite = bb.sprite
+        end
+
+        if sprite == nil then
+            sprite = spriteLoad.error
+        end
+
         local halfFOV = player.fov / 2
         if math.abs(relativeAngle) < halfFOV and not engine.isBlocked(player.x, player.y, bb.x, bb.y) and bb.distance < player.viewDistance * map.block2DSize then
+            local dist = bb.distance
             local size = 3000 / dist
             local screenX = (relativeAngle + halfFOV) / player.fov * game.width
 
-            love.graphics.setColor(colors.white)
-            local heightOffset = bb.z * size / bb.sprite:getHeight()
-            love.graphics.draw(bb.sprite, screenX - (size * bb.widthAplify) / 2, game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / bb.sprite:getWidth(), (size * bb.heightAplify) / bb.sprite:getHeight())
+            love.graphics.setColor(1,1,1)
+            local heightOffset = bb.z * size / sprite:getHeight()
+            love.graphics.draw(sprite, screenX - (size * bb.widthAplify) / 2, game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / sprite:getWidth(), (size * bb.heightAplify) / sprite:getHeight())
         end
     end
 end
+
+
 
 function engine.sortDistance(inputTable)
     local sorted = {}
