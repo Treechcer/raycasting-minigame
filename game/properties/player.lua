@@ -4,7 +4,7 @@ player = {
     angleDeg = 0,
     speed = 100,
     size = 30,
-    fov = 90,
+    fov = 70,
     angleMovDeg = 0,
 
     weaponHeight = 0,

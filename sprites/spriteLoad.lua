@@ -7,7 +7,6 @@ spriteLoad = {
     testRotation = {
         love.graphics.newImage("sprites/gun.png"),
         love.graphics.newImage("sprites/guy.png"),
-        love.graphics.newImage("sprites/weezer.png"),
     },
     error = love.graphics.newImage("sprites/error.png")
 }

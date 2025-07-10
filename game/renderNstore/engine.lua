@@ -88,7 +88,11 @@ function engine.raycast(angleDeg)
     wallX = wallX - math.floor(wallX)
 
     local distance = perpWallDist * map.block2DSize
-    local height = 10000 / distance
+    local coDist = distance * math.cos(math.rad(angleDeg - player.angleDeg))
+    if coDist < 1 then
+        coDist = 1
+    end
+    local height = 10000 / coDist 
     return distance, height, side, wallX, num
 end
 
@@ -100,7 +104,8 @@ function engine.castRay()
     local sliceWidth = screenWidth / rayCount
 
     for i = 0, rayCount - 1 do
-        local rayAngle = player.angleDeg - (fov / 2) + (i * (fov / rayCount))
+        local cameraX = 2 * i / rayCount - 1
+        local rayAngle = player.angleDeg + cameraX * (fov / 2)
         local dist, height, side, wallX, num = engine.raycast(rayAngle)
         engine.wallDraw(i, dist, height, sliceWidth, 10, side, wallX, num)
     end
@@ -116,7 +121,7 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
 
     for j = 0, height - 1 do
         local texY = math.min(textures.wall.size - 1, math.floor(j * textures.wall.size / height))
-        local yPos = math.floor(300 - height / 2 + j)
+        local yPos = math.floor((game.height / 2) - height / 2 + j)
         local col = 0
 
         local ditter = ((i + yPos) % ditterPattern < (ditterPattern / (distance / 10)))
