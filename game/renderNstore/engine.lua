@@ -225,7 +225,7 @@ function engine.drawBilboarding()
 
         local sprite
         if type(bb.sprite) == "table" then
-            local angleRelative = relativeAngle + 180
+            local angleRelative = relativeAngle
             local sector = degMath.fixDeg(player.angleDeg - angleRelative) / 360 * #bb.sprite
             local spriteIndex = math.floor(sector) + 1
             sprite = bb.sprite[spriteIndex]
