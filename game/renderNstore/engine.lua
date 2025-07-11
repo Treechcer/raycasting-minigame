@@ -119,7 +119,13 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
     local darkFactor = 1 + (distance/50)
     local adjCol = {}
 
-    for j = 0, height - 1 do
+    local maxLines = 200 
+    local step = 1
+    if height > maxLines then
+        step = math.floor(height / maxLines)
+    end
+
+    for j = 0, height - 1, step do
         local texY = math.min(textures.wall.size - 1, math.floor(j * textures.wall.size / height))
         local yPos = math.floor((game.height / 2) - height / 2 + j)
         local col = 0
@@ -153,7 +159,7 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
             love.graphics.setColor(adjCol[1],adjCol[2],adjCol[3])
         end
 
-        love.graphics.rectangle("fill", i * width, yPos, width, 1)
+        love.graphics.rectangle("fill", i * width, yPos, width, step)
     end
 end
 

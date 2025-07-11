@@ -23,6 +23,9 @@ end
 
 function love.draw()
 
+    love.graphics.setCanvas(game.canvas)
+    love.graphics.clear()
+
     --[[map.random()
 
     t = noise.generateMap()
@@ -52,8 +55,12 @@ function love.draw()
         player.checkWall(player.x, player.y)
 
         love.graphics.setColor(colors.black)
-        love.graphics.print(love.timer.getFPS(), 0, 0)
+        love.graphics.print(love.timer.getFPS(), 200, 200)
     end
+
+    love.graphics.setColor(1,1,1)
+    love.graphics.setCanvas()
+    love.graphics.draw(game.canvas, 0, 0)
 end
 
 function love.update(dt)

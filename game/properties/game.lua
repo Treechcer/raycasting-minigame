@@ -4,4 +4,6 @@ game = {
     height = love.graphics.getHeight()
 }
 
+game.canvas = love.graphics.newCanvas(game.width, game.height)
+
 return game
