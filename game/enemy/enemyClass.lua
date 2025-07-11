@@ -6,11 +6,12 @@ local enemyClass = {
             size = { height = 1, width = 1 },
             attackDamage = 5,
             attacooldown = 2,
+            movecooldow = 0.3,
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
             lastMovedcCd = 0,
-            speed = 100,
+            speed = 3,
             x = "int_num",
             y = "int_num",
             z = "int_num",
@@ -18,12 +19,14 @@ local enemyClass = {
             angleDeg = 50,
             AItype = "normal",
             sprites = sprites.guy,
-            redLineId = "int_num"
+            redLineId = "int_num",
+            rotateSpeed = 0.1,
         },
         medium = {
             size = { height = 1.5, width = 1.5 },
             attackDamage = 5,
             attacooldown = 2,
+            movecooldow = 0.3,
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
@@ -36,12 +39,14 @@ local enemyClass = {
             angleDeg = 50,
             AItype = "normal",
             sprites = sprites.guy,
-            redLineId = "int_num"
+            redLineId = "int_num",
+            rotateSpeed = 0.1,
         },
         big = {
             size = { height = 2, width = 2 },
             attackDamage = 5,
             attacooldown = 2,
+            movecooldow = 0.3,
             viewDistance = 5,
             attackRange = 20,
             lastAttackCd = 0,
@@ -54,7 +59,8 @@ local enemyClass = {
             angleDeg = 50,
             AItype = "normal",
             sprites = sprites.guy,
-            redLineId = "int_num"
+            redLineId = "int_num",
+            rotateSpeed = 0.1,
         }
     }
 }
@@ -75,7 +81,7 @@ local function deepcopy(orig)
 end
 
 -- Create enemy instance
-function enemyClass.create(enemyType, x, y, z, id, redLineId)
+function enemyClass.create(enemyType, x, y, z, id)
     local template = enemyClass.enemyTypes[enemyType]
     if not template then
         error("Unknown enemy type: " .. tostring(enemyType))
@@ -86,7 +92,6 @@ function enemyClass.create(enemyType, x, y, z, id, redLineId)
     enemy.y = y
     enemy.z = z
     enemy.id = id
-    enemy.redLineId = redLineId
     return enemy
 end
 

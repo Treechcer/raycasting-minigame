@@ -16,11 +16,7 @@ function enemies.create(type, x, y, z)
     bilboarding.createBilboard(enemyClass.enemyTypes[type].sprites, x, y, z, enemyClass.enemyTypes[type].size.height, enemyClass.enemyTypes[type].size.width)
     local id = #bilboarding
     local enTypeChache = enemies[type .. "Enemy"]
-    local offSetX = math.sin(math.rad(50)) * 2.1
-    local offSetY = math.cos(math.rad(50)) * 2.1
-    bilboarding.createBilboard(spriteLoad.redLine, x + offSetX, y + offSetY, z, 1, 2)
-    local redLineId = #bilboarding
-    local newEnemy = enemyClass.create(type, x, y, z, id, redLineId)
+    local newEnemy = enemyClass.create(type, x, y, z, id)
     table.insert(enTypeChache, newEnemy)
 end
 
@@ -29,7 +25,7 @@ function enemies.behavior()
         local enTypeChache = enemies[type .. "Enemy"]
         for i = 1, #enTypeChache do
             local enemy = enTypeChache[i]
-            if enemy.lastMovedcCd >= 0.5 and not engine.isBlocked(player.x, player.y, enemy.x, enemy.y) then
+            if enemy.lastMovedcCd >= enemy.movecooldow and not engine.isBlocked(player.x, player.y, enemy.x, enemy.y) then
                 local dx = player.x - enemy.x
                 local dy = player.y - enemy.y
                 local targetAngle = math.deg(math.atan2(dy, dx))
@@ -37,19 +33,16 @@ function enemies.behavior()
                     targetAngle = targetAngle + 360
                 end
 
-                enemy.angleDeg = enemies.angleLerp(enemy.angleDeg, targetAngle, 0.1)
-                local rad = math.rad(enemy.angleDeg)
-                local speed = 2
-                enemy.x = enemy.x + math.cos(rad) * speed
-                enemy.y = enemy.y + math.sin(rad) * speed
-                bilboarding[enemy.id].x = enemy.x
-                bilboarding[enemy.id].y = enemy.y
-
-                local offSetX = math.cos(rad) * 2.1
-                local offSetY = math.sin(rad) * 2.1
-                bilboarding[enemy.redLineId].x = enemy.x + offSetX
-                bilboarding[enemy.redLineId].y = enemy.y + offSetY
-                enemy.lastMovedcCd = 0
+                enemy.angleDeg = enemies.angleLerp(enemy.angleDeg, targetAngle, enemy.rotateSpeed)
+                
+                if engine.calculateDistance(player.x, player.y, enemy.x, enemy.y) >= 15 then
+                        local rad = math.rad(enemy.angleDeg)
+                    enemy.x = enemy.x + math.cos(rad) * enemy.speed
+                    enemy.y = enemy.y + math.sin(rad) * enemy.speed
+                    bilboarding[enemy.id].x = enemy.x
+                    bilboarding[enemy.id].y = enemy.y
+                    enemy.lastMovedcCd = 0
+                end
             end
         end
     end
