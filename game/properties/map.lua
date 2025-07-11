@@ -1,6 +1,6 @@
 map = {
-    lenght = 64,
-    height = 64,
+    lenght = 32,
+    height = 32,
     block2DSize = 64,
     map = {
         1,1,1,1,1,1,1,0,
