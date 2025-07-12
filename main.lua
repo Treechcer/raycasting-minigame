@@ -15,6 +15,7 @@ function love.load()
     gunStats = require("game.properties.gunStats")
     audio = require("sounds.audio")
     enemies = require("game.enemy.enemies")
+    inventory = require("game.renderNstore.inventory")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 
@@ -50,6 +51,7 @@ function love.draw()
     player.render2D()
     player.renderGun()
     player.renderCrosshair()
+    inventory.draw()
 
     if game.debug then
         player.checkWall(player.x, player.y)
@@ -121,9 +123,9 @@ function love.update(dt)
 
     if love.keyboard.isDown("space") and player.shootCooldown >= 0.5 then
         --bilboarding.createBilboard(spriteLoad.gun, player.x, player.y, -600)
-        if player.gunSlots[player.equipedGunSlot] == "gun" then
+        if inventory.gunSlots[inventory.equipedGunSlot] == "gun" then
             projectile.create(projectile.gun)
-        elseif player.gunSlots[player.equipedGunSlot] == "pickaxe" then
+        elseif inventory.gunSlots[inventory.equipedGunSlot] == "pickaxe" then
             engine.pickaxe()
         end
         player.shootCooldown = 0
@@ -212,15 +214,15 @@ function love.mousemoved(x, y, dx, dy)
 end
 
 function love.wheelmoved(x, y)
-    if y > 0 and player.scrollCooldown >= 0.5 then
-        if player.equipedGunSlot < #player.gunSlots then
-            player.scrollCooldown = 0
-            player.equipedGunSlot = player.equipedGunSlot + 1
+    if y > 0 and inventory.scrollCooldown >= 0.5 then
+        if inventory.equipedGunSlot < #inventory.gunSlots then
+            inventory.scrollCooldown = 0
+            inventory.equipedGunSlot = inventory.equipedGunSlot + 1
         end
-    elseif y < 0 and player.scrollCooldown >= 0.5 then
-        if player.equipedGunSlot > 1 then
-            player.scrollCooldown = 0
-            player.equipedGunSlot = player.equipedGunSlot - 1
+    elseif y < 0 and inventory.scrollCooldown >= 0.5 then
+        if inventory.equipedGunSlot > 1 then
+            inventory.scrollCooldown = 0
+            inventory.equipedGunSlot = inventory.equipedGunSlot - 1
         end
     end
 end

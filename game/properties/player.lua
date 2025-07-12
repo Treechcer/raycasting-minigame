@@ -12,13 +12,10 @@ player = {
     gunNumDeg = 0,
     shootCooldown = 10000, -- makes it that player can shoot, because of course the cooldown won¨t be more like 1s or whatever... yes this number is in seconds
 
-    equipedGunSlot = 1,
-    gunSlots = {"gun", "pickaxe", "granade"},
-    scrollCooldown = 10000,
-
     viewDistance = 5,
 }
 
+local inventory = require("game.renderNstore.inventory")
 local map = require("game.properties.map")
 local spriteLoad = require("sprites.spriteLoad")
 local gunStats = require("game.properties.gunStats")
@@ -69,7 +66,7 @@ end
 function player.renderGun()
     love.graphics.setColor(colors.white)
     width, height = love.graphics.getDimensions()
-    local tempPath = player.gunSlots[player.equipedGunSlot]
+    local tempPath = inventory.gunSlots[inventory.equipedGunSlot]
     love.graphics.draw(spriteLoad[tempPath], width / 3 + gunStats[tempPath].xOffset, height / 1.3 + gunStats[tempPath].yOffset, 0, 1 * gunStats[tempPath].weaponWidth, 1 * gunStats[tempPath].weaponHeight)
 end
 
@@ -80,7 +77,7 @@ end
 
 function player.cooldwonChange(dt)
     player.shootCooldown = player.shootCooldown + dt
-    player.scrollCooldown = player.scrollCooldown + dt
+    inventory.scrollCooldown = inventory.scrollCooldown + dt
 end
 
 return player
