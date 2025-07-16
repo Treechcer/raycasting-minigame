@@ -18,9 +18,9 @@ function projectile.create(projectileType)
     local forwardX = math.cos(angleRad) * 5
     local forwardY = math.sin(angleRad) * 5
 
-    bilboarding.createBilboard(spriteLoad.fists, player.x + forwardX, player.y + forwardY, 0, 0.5, 0.5)
+    bilboarding.createBilboard(spriteLoad.fists, player.x + forwardX, player.y + forwardY, 8, 1, 1)
     local index = #bilboarding
-    local tempTable = {x = player.x + forwardX, y = player.y + forwardY, z = 0, id = index, angleDeg = player.angleDeg + player.angleMovDeg}
+    local tempTable = {x = player.x + forwardX, y = player.y + forwardY, z = 8, id = index, angleDeg = player.angleDeg + player.angleMovDeg}
 
     table.insert(projectileType.projectiles, tempTable)
 end
