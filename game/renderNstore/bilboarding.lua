@@ -14,6 +14,6 @@ function bilboarding.print()
     end
 end
 
-bilboarding.createBilboard(spriteLoad.testRotation, 100, 100, -600, 1, 1)
+bilboarding.createBilboard(spriteLoad.testRotation, 100, 100, 0, 1, 1)
 
 return bilboarding
