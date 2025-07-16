@@ -53,6 +53,26 @@ function projectile.move(dt)
     end
 end
 
+function projectile.enemyHit()
+    for key, gunType in pairs(projectile) do
+        if type(gunType) == "table" and gunType.projectiles then
+            for i = 1, #enemies.enTypes do
+                local tempEnType = enemies.enTypes[i] .. "Enemy"
+                local en = enemies[tempEnType]
+                for index, value0 in pairs(en) do
+                    for j = #gunType.projectiles, 1, -1 do
+                        local proj = gunType.projectiles[j]
+                        if engine.calculateDistance(proj.x, proj.y, value0.x, value0.y) <= 5 then
+                            projectile.destroy(gunType.projectiles, j)
+                            enemies.damage(gunType.dmg, tempEnType, index)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 function projectile.destroy(proj, index)
     if proj[index] then
         table.remove(bilboarding, proj[index].id)

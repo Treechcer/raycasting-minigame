@@ -21,6 +21,8 @@ local enemyClass = {
             sprites = sprites.guy,
             redLineId = "int_num",
             rotateSpeed = 0.1,
+            maxHP = 100,
+            currentHp = 100
         },
         medium = {
             size = { height = 1.5, width = 1.5 },
@@ -41,6 +43,8 @@ local enemyClass = {
             sprites = sprites.guy,
             redLineId = "int_num",
             rotateSpeed = 0.1,
+            maxHP = 100,
+            currentHp = 100
         },
         big = {
             size = { height = 2, width = 2 },
@@ -61,11 +65,12 @@ local enemyClass = {
             sprites = sprites.guy,
             redLineId = "int_num",
             rotateSpeed = 0.1,
+            maxHP = 100,
+            currentHp = 100
         }
     }
 }
 
--- Deep copy helper
 local function deepcopy(orig)
     local copy
     if type(orig) == "table" then
@@ -80,7 +85,6 @@ local function deepcopy(orig)
     return copy
 end
 
--- Create enemy instance
 function enemyClass.create(enemyType, x, y, z, id)
     local template = enemyClass.enemyTypes[enemyType]
     if not template then

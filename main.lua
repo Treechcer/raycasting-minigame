@@ -52,6 +52,7 @@ function love.draw()
     player.renderGun()
     player.renderCrosshair()
     inventory.draw()
+    projectile.enemyHit()
 
     if game.debug then
         player.checkWall(player.x, player.y)

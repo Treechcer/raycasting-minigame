@@ -36,7 +36,7 @@ function enemies.behavior()
                 enemy.angleDeg = enemies.angleLerp(enemy.angleDeg, targetAngle, enemy.rotateSpeed)
                 
                 if engine.calculateDistance(player.x, player.y, enemy.x, enemy.y) >= 15 then
-                        local rad = math.rad(enemy.angleDeg)
+                    local rad = math.rad(enemy.angleDeg)
                     enemy.x = enemy.x + math.cos(rad) * enemy.speed
                     enemy.y = enemy.y + math.sin(rad) * enemy.speed
                     bilboarding[enemy.id].x = enemy.x
@@ -60,6 +60,29 @@ function enemies.colldown(dt)
             enTypeChache[i].lastMovedcCd = enTypeChache[i].lastMovedcCd + dt
             enTypeChache[i].lastAttackCd = enTypeChache[i].lastAttackCd + dt
         end
+    end
+end
+
+function enemies.damage(damage, enType, index)
+    local enemyList = enemies[enType]
+    local en = enemyList[index]
+
+    if en ~= nil then
+        en.currentHp = en.currentHp - damage
+
+        if en.currentHp <= 0 then
+            table.remove(bilboarding, en.id)
+            enemies.changeEnemyID(en.id, enType)
+
+            table.remove(enemyList, index)
+        end
+    end
+end
+
+function enemies.changeEnemyID(id, type)
+    local enemyList = enemies[type]
+    for i = id, #enemyList do
+        enemyList[i].id = enemyList[i].id - 1
     end
 end
 
