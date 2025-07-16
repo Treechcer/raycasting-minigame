@@ -12,10 +12,10 @@ gunStats = {
         xOffset = 0,
     },
     granade = {
-        weaponHeight = 0.5,
-        weaponWidth = 0.5,
-        yOffset = 0,
-        xOffset = 50,
+        weaponHeight = 10,
+        weaponWidth = 10,
+        yOffset = -175,
+        xOffset = -50,
     },
 }
 
