@@ -1,7 +1,7 @@
 inventory = {
     maxSlots = 3,
     equipedGunSlot = 1,
-    gunSlots = {"pickaxe", "gun", "granade"},
+    gunSlots = {"pickaxe", "", ""},
     scrollCooldown = 10000,
 
     boxSize = 50
@@ -19,6 +19,10 @@ function inventory.draw()
             love.graphics.rectangle("line", game.width / 2 - (inventory.boxSize * 2.6) + (inventory.boxSize * (i)), game.height - inventory.boxSize * 1.5, inventory.boxSize, inventory.boxSize)
         end
         sprite = sprites[inventory.gunSlots[i]]
+
+        if sprite == nil then
+            sprite = sprites["fists"]
+        end
 
         local spriteX = sprite:getWidth()
         local spriteY = sprite:getHeight()

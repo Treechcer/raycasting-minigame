@@ -14,6 +14,7 @@ enemies = {
 
 function enemies.create(type, x, y, z)
     bilboarding.createBilboard(enemyClass.enemyTypes[type].sprites, x, y, z, enemyClass.enemyTypes[type].size.height, enemyClass.enemyTypes[type].size.width)
+    print(enemyClass.enemyTypes[type].sprites)
     local id = #bilboarding
     local enTypeChache = enemies[type .. "Enemy"]
     local newEnemy = enemyClass.create(type, x, y, z, id)

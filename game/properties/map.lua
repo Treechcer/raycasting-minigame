@@ -1,6 +1,9 @@
+gunStats = require("game.properties.gunStats")
+spriteLoad = require("sprites.spriteLoad")
+
 map = {
-    lenght = 32,
-    height = 32,
+    lenght = 16,
+    height = 16,
     block2DSize = 64,
     map = {
         1,1,1,1,1,1,1,0,
@@ -13,7 +16,9 @@ map = {
         1,0,0,0,0,0,0,0,
     },
 
-    miniMapSize = 200  --it's a square
+    gunMap = {}, --here will be like "gunName" = {tileX, tileY} --both INT
+
+    miniMapSize = 200,  --it's a square (also in px)
 }
 
 map.surface = map.height * map.lenght
@@ -21,6 +26,8 @@ map.surface = map.height * map.lenght
 function map.draw2D()
     love.graphics.setColor(colors.black)
     love.graphics.rectangle("fill", 0, 0, map.miniMapSize + 1, map.miniMapSize + 1)
+    local blockSizeX = map.miniMapSize / map.lenght
+    local blockSizeY = map.miniMapSize / map.height
     
     for y = 1, map.height do
         for x = 1, map.lenght do
@@ -29,11 +36,17 @@ function map.draw2D()
             else
                 love.graphics.setColor(colors.white)
             end
-            local blockSizeX = map.miniMapSize / map.lenght
-            local blockSizeY = map.miniMapSize / map.height
 
             love.graphics.rectangle("fill", (x - 1) * blockSizeX + 1, (y - 1) * blockSizeY + 1, blockSizeX - 1, blockSizeY - 1)
         end
+    end
+
+    love.graphics.setColor(colors.crosshair)
+    for key, value in pairs(map.gunMap) do
+        local x = map.gunMap[key].tileX
+        local y = map.gunMap[key].tileY
+
+        love.graphics.rectangle("fill", (x - 1) * blockSizeX + 1, (y - 1) * blockSizeY + 1, blockSizeX - 1, blockSizeY - 1)
     end
 end
 
@@ -60,6 +73,26 @@ function map.random()
     end
 
     map.map[2 + map.lenght] = 0
+
+    math.randomseed(os.time())
+    for key, value in pairs(gunStats) do
+        notSpawnedWeapons = true
+        while notSpawnedWeapons do
+            local x = math.random(map.lenght)
+            local y = math.random(map.height)
+
+            if map.map[(y - 1) * map.lenght + x] == 0 then
+                map.gunMap[key] = {
+                    tileX = x,
+                    tileY = y,
+                }
+                local offset = map.block2DSize / 2
+                bilboarding.createBilboard(spriteLoad[key], x * map.block2DSize - offset, y * map.block2DSize - offset, 0, 3, 3)
+                print(gunStats[key].mapNum)
+                notSpawnedWeapons = false
+            end
+        end
+    end
 
     --[[for l = 1, #map.map do
         print(map.map[l])

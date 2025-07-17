@@ -69,6 +69,10 @@ function player.renderGun()
     love.graphics.setColor(colors.white)
     width, height = love.graphics.getDimensions()
     local tempPath = inventory.gunSlots[inventory.equipedGunSlot]
+    if tempPath == "" then
+        tempPath = "fists"
+    end
+    print(tempPath, spriteLoad[tempPath])
     love.graphics.draw(spriteLoad[tempPath], width / 3 + gunStats[tempPath].xOffset, height / 1.3 + gunStats[tempPath].yOffset + offsetY, 0, 1 * gunStats[tempPath].weaponWidth, 1 * gunStats[tempPath].weaponHeight)
 end
 
