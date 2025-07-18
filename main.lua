@@ -41,11 +41,17 @@ function love.draw()
         love.graphics.rectangle("fill", x * 5, y * 5, 5, 5)
     end]]
 
+    -- this is temporary for drawing floors and ceilings, I'll add proper ones one day
+
     love.graphics.setBackgroundColor(colors.ceiling)
 
     love.graphics.setColor(colors.floor)
     love.graphics.rectangle("fill", 0, 300, 800, 300)
 
+    --
+
+    -- These functions are here to draw everything in the "game loop", 2D map, gun etc.
+    
     engine.castRay()
     map.draw2D()
     player.render2D()
@@ -54,7 +60,8 @@ function love.draw()
     inventory.draw()
     projectile.enemyHit()
 
-    if game.debug then
+    --
+    if game.debug then -- some debug values will be displayed or done, for normal playthrough it'll be off
         player.checkWall(player.x, player.y)
 
         love.graphics.setColor(colors.black)
@@ -67,6 +74,7 @@ function love.draw()
 end
 
 function love.update(dt)
+    --some needed variables
     player.angleMovDeg = 0
     local moveSpeed = player.speed * dt
     local angleRad = math.rad(player.angleDeg)
@@ -75,14 +83,14 @@ function love.update(dt)
     local moveY = 0
     local forwardX = math.cos(angleRad)
     local forwardY = math.sin(angleRad)
-    local sideX = math.cos(angleRad + math.rad(90))
+    local sideX = math.cos(angleRad + math.rad(90)) -- these two variables are here if player wants to walk to left / right, we just ratate the angle of played by 90°
     local sideY = math.sin(angleRad + math.rad(90))
     
-    if love.keyboard.isDown("e") then
+    if love.keyboard.isDown("e") then -- temp. test for spawning enemies
         enemies.create("small", player.x, player.y, 0)
     end
 
-    if love.keyboard.isDown("a") then
+    if love.keyboard.isDown("a") then -- these inputs make some movement for the player, if it'll be possible which is determined few lines down
         moveX = moveX - sideX
         moveY = moveY - sideY
         player.angleMovDeg = -19.5
@@ -100,7 +108,7 @@ function love.update(dt)
         moveY = moveY - forwardY
     end
 
-    local normalisedVector = (moveX ^ 2 + moveY ^ 2) ^ 0.5
+    local normalisedVector = (moveX ^ 2 + moveY ^ 2) ^ 0.5 -- we normalise the vector, so we will walk the same speed if we go more than one dirrection
     if normalisedVector > 0 then
         --player.x = moveX + player.speed * dt
         --player.y = moveY + player.speed * dt
@@ -119,10 +127,10 @@ function love.update(dt)
 
         player.gunNumDeg = player.gunNumDeg + 300 * dt
         player.gunNumDeg = degMath.fixDeg(player.gunNumDeg)
-        player.weaponHeight = math.sin(math.rad(player.gunNumDeg)) * 30
+        --player.weaponHeight = math.sin(math.rad(player.gunNumDeg)) * 30
     end
 
-    if love.keyboard.isDown("space") and player.shootCooldown >= 0.5 then
+    if love.keyboard.isDown("space") and player.shootCooldown >= 0.5 then -- this is for shooting, temporary it's on space
         --bilboarding.createBilboard(spriteLoad.gun, player.x, player.y, -600)
         if inventory.gunSlots[inventory.equipedGunSlot] == "gun" then
             projectile.create(projectile.gun)
@@ -132,10 +140,14 @@ function love.update(dt)
         player.shootCooldown = 0
     end
 
+    -- some functions to reset cooldows and for enemy behaviour (AI)
+
     player.cooldwonChange(dt)
     projectile.move(dt)
     enemies.behavior()
     enemies.colldown(dt)
+
+    --
 
     --[[
     if love.keyboard.isDown("a") then
@@ -194,8 +206,8 @@ function love.update(dt)
         player.y = y
     end]]
 
-    if love.keyboard.isDown("q") then
-        love.event.quit() --for ending the game
+    if love.keyboard.isDown("q") then -- Q is for Quit!
+        love.event.quit()
     end
 
     --[[if love.mouse.getX() >= width/2 + 10 then
@@ -207,14 +219,14 @@ function love.update(dt)
     end]]
 end
 
-function love.mousemoved(x, y, dx, dy)
+function love.mousemoved(x, y, dx, dy) -- here we change where the player looks
     player.angleDeg = player.angleDeg + dx * settings.sensitivity
     player.angleDeg = degMath.fixDeg(player.angleDeg)
 
     love.mouse.setX(dx)
 end
 
-function love.wheelmoved(x, y)
+function love.wheelmoved(x, y) -- this is for changing the weapon we have equiped
     if y > 0 and inventory.scrollCooldown >= 0.5 then
         if inventory.equipedGunSlot < #inventory.gunSlots then
             inventory.scrollCooldown = 0
