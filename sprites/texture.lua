@@ -1,3 +1,5 @@
+--this file is mess, but this file is just all the wall stored in numbes (can be anything between 0 - 1 if I recall correctly, it's percentage of the collor that it'll display)
+
 local color = require("UINreletad.colors")
 
 textures = {

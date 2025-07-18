@@ -1,3 +1,5 @@
+-- this will be used for settings in menus, here will be all kinds of settings
+
 settings = {
     sensitivity = 0.2,
     width = love.graphics.getWidth(),

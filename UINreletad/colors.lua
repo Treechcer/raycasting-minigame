@@ -1,3 +1,5 @@
+-- this file is for all the collors I'll use, I can any time change or add more collors, it's easier I think / feel
+
 colors = {
     wall = {0.235, 0.62, 0.816},
     floor = {0.2, 0.15, 0.2},

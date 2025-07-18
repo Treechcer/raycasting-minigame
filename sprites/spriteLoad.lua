@@ -1,3 +1,5 @@
+-- this file is for loading all the sprites, because loading all the sprites are expensive to load
+
 spriteLoad = {
     gun = love.graphics.newImage("sprites/gun.png"),
     --guy = love.graphics.newImage("sprites/guy.png"),

@@ -4,7 +4,7 @@ degMath = {
     oneDegree = math.rad(1) -- 1 degree in radians
 }
 
-function degMath.fixDeg(angle)
+function degMath.fixDeg(angle) -- this makes the degrees fit in 360°
     local res = angle % 360
 
     if res < 0 then
