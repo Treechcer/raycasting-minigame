@@ -18,6 +18,8 @@ function love.load()
     inventory = require("game.renderNstore.inventory")
     console = require("UINreletad.console")
 
+    utf8 = require("utf8")
+
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 
     map.random()
@@ -79,79 +81,80 @@ function love.draw()
 end
 
 function love.update(dt)
-    --some needed variables
-    player.angleMovDeg = 0
-    local moveSpeed = player.speed * dt
-    local angleRad = math.rad(player.angleDeg)
+    if not console.active then
+        --some needed variables
+        player.angleMovDeg = 0
+        local moveSpeed = player.speed * dt
+        local angleRad = math.rad(player.angleDeg)
 
-    local moveX = 0
-    local moveY = 0
-    local forwardX = math.cos(angleRad)
-    local forwardY = math.sin(angleRad)
-    local sideX = math.cos(angleRad + math.rad(90)) -- these two variables are here if player wants to walk to left / right, we just ratate the angle of played by 90°
-    local sideY = math.sin(angleRad + math.rad(90))
-    
-    if love.keyboard.isDown("e") then -- temp. test for spawning enemies
-        enemies.create("small", player.x, player.y, 0)
-    end
-
-    if love.keyboard.isDown("a") then -- these inputs make some movement for the player, if it'll be possible which is determined few lines down
-        moveX = moveX - sideX
-        moveY = moveY - sideY
-        player.angleMovDeg = -19.5
-    elseif love.keyboard.isDown("d") then
-        moveX = moveX + sideX
-        moveY = moveY + sideY
-        player.angleMovDeg = 19.5
-    end
-
-    if love.keyboard.isDown("w") then
-        moveX = moveX + forwardX
-        moveY = moveY + forwardY
-    elseif love.keyboard.isDown("s") then
-        moveX = moveX - forwardX
-        moveY = moveY - forwardY
-    end
-
-    local normalisedVector = (moveX ^ 2 + moveY ^ 2) ^ 0.5 -- we normalise the vector, so we will walk the same speed if we go more than one dirrection
-    if normalisedVector > 0 then
-        --player.x = moveX + player.speed * dt
-        --player.y = moveY + player.speed * dt
-
-        moveX = player.x + (moveX * moveSpeed / normalisedVector)
-        moveY = player.y + (moveY * moveSpeed / normalisedVector)
-
-        local xMove = player.checkWall(moveX, player.y)
-        local yMove = player.checkWall(player.x, moveY)
-
-        local x = xMove and moveX or player.x
-        local y = yMove and moveY or player.y
-
-        player.x = x
-        player.y = y
-
-        player.gunNumDeg = player.gunNumDeg + 300 * dt
-        player.gunNumDeg = degMath.fixDeg(player.gunNumDeg)
-        --player.weaponHeight = math.sin(math.rad(player.gunNumDeg)) * 30
-    end
-
-    if love.keyboard.isDown("space") and player.shootCooldown >= 0.5 then -- this is for shooting, temporary it's on space
-        --bilboarding.createBilboard(spriteLoad.gun, player.x, player.y, -600)
-        if inventory.gunSlots[inventory.equipedGunSlot] == "gun" then
-            projectile.create(projectile.gun)
-        elseif inventory.gunSlots[inventory.equipedGunSlot] == "pickaxe" then
-            engine.pickaxe()
+        local moveX = 0
+        local moveY = 0
+        local forwardX = math.cos(angleRad)
+        local forwardY = math.sin(angleRad)
+        local sideX = math.cos(angleRad + math.rad(90)) -- these two variables are here if player wants to walk to left / right, we just ratate the angle of played by 90°
+        local sideY = math.sin(angleRad + math.rad(90))
+        
+        if love.keyboard.isDown("e") then -- temp. test for spawning enemies
+            enemies.create("small", player.x, player.y, 0)
         end
-        player.shootCooldown = 0
+
+        if love.keyboard.isDown("a") then -- these inputs make some movement for the player, if it'll be possible which is determined few lines down
+            moveX = moveX - sideX
+            moveY = moveY - sideY
+            player.angleMovDeg = -19.5
+        elseif love.keyboard.isDown("d") then
+            moveX = moveX + sideX
+            moveY = moveY + sideY
+            player.angleMovDeg = 19.5
+        end
+
+        if love.keyboard.isDown("w") then
+            moveX = moveX + forwardX
+            moveY = moveY + forwardY
+        elseif love.keyboard.isDown("s") then
+            moveX = moveX - forwardX
+            moveY = moveY - forwardY
+        end
+
+        local normalisedVector = (moveX ^ 2 + moveY ^ 2) ^ 0.5 -- we normalise the vector, so we will walk the same speed if we go more than one dirrection
+        if normalisedVector > 0 then
+            --player.x = moveX + player.speed * dt
+            --player.y = moveY + player.speed * dt
+
+            moveX = player.x + (moveX * moveSpeed / normalisedVector)
+            moveY = player.y + (moveY * moveSpeed / normalisedVector)
+
+            local xMove = player.checkWall(moveX, player.y)
+            local yMove = player.checkWall(player.x, moveY)
+
+            local x = xMove and moveX or player.x
+            local y = yMove and moveY or player.y
+
+            player.x = x
+            player.y = y
+
+            player.gunNumDeg = player.gunNumDeg + 300 * dt
+            player.gunNumDeg = degMath.fixDeg(player.gunNumDeg)
+            --player.weaponHeight = math.sin(math.rad(player.gunNumDeg)) * 30
+        end
+
+        if love.keyboard.isDown("space") and player.shootCooldown >= 0.5 then -- this is for shooting, temporary it's on space
+            --bilboarding.createBilboard(spriteLoad.gun, player.x, player.y, -600)
+            if inventory.gunSlots[inventory.equipedGunSlot] == "gun" then
+                projectile.create(projectile.gun)
+            elseif inventory.gunSlots[inventory.equipedGunSlot] == "pickaxe" then
+                engine.pickaxe()
+            end
+            player.shootCooldown = 0
+        end
+
+        -- here we open and close the console, you can't write to the console yet
+
+        if love.keyboard.isDown("t") and console.lastOpen >= console.consoleCD then
+            console.active = not console.active
+            console.lastOpen = 0
+        end
     end
-
-    -- here we open and close the console, you can't write to the console yet
-
-    if love.keyboard.isDown("t") and console.lastOpen >= console.consoleCD then
-        console.active = not console.active
-        console.lastOpen = 0
-    end
-
     --
 
     -- here are called functions for cooldown time reset and for enemy behaviour
@@ -218,7 +221,7 @@ function love.update(dt)
         player.y = y
     end]]
 
-    if love.keyboard.isDown("q") then -- Q is for Quit!
+    if love.keyboard.isDown("q") and not console.active then -- Q is for Quit!
         love.event.quit()
     end
 
@@ -232,29 +235,71 @@ function love.update(dt)
 end
 
 function love.mousemoved(x, y, dx, dy) -- here we change where the player looks
-    player.angleDeg = player.angleDeg + dx * settings.sensitivity
-    player.angleDeg = degMath.fixDeg(player.angleDeg)
+    if not console.active then
+        player.angleDeg = player.angleDeg + dx * settings.sensitivity
+        player.angleDeg = degMath.fixDeg(player.angleDeg)
 
-    love.mouse.setX(dx)
+        love.mouse.setX(dx)
+    end
 end
 
 function love.wheelmoved(x, y) -- this is for changing the weapon we have equiped
-    if y > 0 and inventory.scrollCooldown >= 0.5 then
-        if inventory.equipedGunSlot < #inventory.gunSlots then
-            inventory.scrollCooldown = 0
-            inventory.equipedGunSlot = inventory.equipedGunSlot + 1
-        end
-    elseif y < 0 and inventory.scrollCooldown >= 0.5 then
-        if inventory.equipedGunSlot > 1 then
-            inventory.scrollCooldown = 0
-            inventory.equipedGunSlot = inventory.equipedGunSlot - 1
+    if not console.active then
+        if y > 0 and inventory.scrollCooldown >= 0.5 then
+            if inventory.equipedGunSlot < #inventory.gunSlots then
+                inventory.scrollCooldown = 0
+                inventory.equipedGunSlot = inventory.equipedGunSlot + 1
+            end
+        elseif y < 0 and inventory.scrollCooldown >= 0.5 then
+            if inventory.equipedGunSlot > 1 then
+                inventory.scrollCooldown = 0
+                inventory.equipedGunSlot = inventory.equipedGunSlot - 1
+            end
         end
     end
 end
 
-function cooldows(dt)
+function cooldows(dt) -- restart colldowns
     player.cooldwonChange(dt)
     projectile.move(dt)
     enemies.colldown(dt)
     console.CD(dt)
+end
+
+function love.textinput(t) -- get's teh input for console
+    if console.active then
+       console.takeInput(t) -- writes it into console
+    end
+end
+
+function love.keypressed(key)
+    if console.active then -- console manpilation
+        if key == "escape" then -- exiting console
+            console.active = not console.active
+            console.lastOpen = 0
+
+        elseif key == "backspace" then -- deletes character (from LOVE2D wiki)
+            local byteoffset = utf8.offset(console.input, -1)
+
+            if byteoffset then
+                console.input = string.sub(console.input, 1, byteoffset - 1)
+            end
+        elseif key == "return" then -- this evaluates if it command is correct
+            console.check()
+        elseif key == "up" then -- this changes the console commands by your last commands using up and down key 
+            if #console.lastCommands > 0 and console.lastCommandIndex >= 1 and console.lastCommandIndex <= #console.lastCommands then
+                if console.lastCommandIndex == #console.lastCommands then
+                    console.input = ""
+                else
+                    console.lastCommandIndex = console.lastCommandIndex + 1
+                    console.input = console.lastCommands[console.lastCommandIndex]
+                end
+            end
+        elseif key == "down" then -- goes down in last commands
+            if #console.lastCommands > 1 and console.lastCommandIndex > 1 and console.lastCommandIndex <= #console.lastCommands + 1 then
+                console.lastCommandIndex = console.lastCommandIndex - 1
+                console.input = console.lastCommands[console.lastCommandIndex]
+            end
+        end
+    end
 end
