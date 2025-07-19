@@ -16,6 +16,7 @@ function love.load()
     audio = require("sounds.audio")
     enemies = require("game.enemy.enemies")
     inventory = require("game.renderNstore.inventory")
+    console = require("UINreletad.console")
 
     love.mouse.setRelativeMode(true) -- makes the mouse not get out of the window
 
@@ -59,6 +60,10 @@ function love.draw()
     player.renderCrosshair()
     inventory.draw()
     projectile.enemyHit()
+
+    if console.active then
+        console.drawConsole()
+    end
 
     --
     if game.debug then -- some debug values will be displayed or done, for normal playthrough it'll be off
@@ -140,12 +145,19 @@ function love.update(dt)
         player.shootCooldown = 0
     end
 
-    -- some functions to reset cooldows and for enemy behaviour (AI)
+    -- here we open and close the console, you can't write to the console yet
 
-    player.cooldwonChange(dt)
-    projectile.move(dt)
+    if love.keyboard.isDown("t") and console.lastOpen >= console.consoleCD then
+        console.active = not console.active
+        console.lastOpen = 0
+    end
+
+    --
+
+    -- here are called functions for cooldown time reset and for enemy behaviour
+
     enemies.behavior()
-    enemies.colldown(dt)
+    cooldows(dt)
 
     --
 
@@ -238,4 +250,11 @@ function love.wheelmoved(x, y) -- this is for changing the weapon we have equipe
             inventory.equipedGunSlot = inventory.equipedGunSlot - 1
         end
     end
+end
+
+function cooldows(dt)
+    player.cooldwonChange(dt)
+    projectile.move(dt)
+    enemies.colldown(dt)
+    console.CD(dt)
 end

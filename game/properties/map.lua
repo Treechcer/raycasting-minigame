@@ -88,7 +88,7 @@ function map.random()
                 }
                 local offset = map.block2DSize / 2
                 bilboarding.createBilboard(spriteLoad[key], x * map.block2DSize - offset, y * map.block2DSize - offset, 0, 3, 3)
-                print(gunStats[key].mapNum)
+                --print(gunStats[key].mapNum)
                 notSpawnedWeapons = false
             end
         end

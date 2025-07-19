@@ -11,6 +11,7 @@ colors = {
     gray = {0.3,0.3,.3},
     red = {0.7, 0.1, 0.1},
     darkGray = {0.22,0.22,0.22},
+    seeThroughBlack = {0,0,0,0.5}
 }
 
 return colors
