@@ -1,3 +1,5 @@
+-- all needed stats for all weapons, that are not in projectiles.lua or where are the others, it's mostly for changing the position etc.
+
 gunStats = {
     gun = {
         weaponHeight = 10,

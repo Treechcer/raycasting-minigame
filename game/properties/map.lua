@@ -1,3 +1,5 @@
+-- this file is for map and map related things
+
 gunStats = require("game.properties.gunStats")
 spriteLoad = require("sprites.spriteLoad")
 
@@ -21,15 +23,15 @@ map = {
     miniMapSize = 200,  --it's a square (also in px)
 }
 
-map.surface = map.height * map.lenght
+map.surface = map.height * map.lenght -- surface of map
 
-function map.draw2D()
+function map.draw2D() -- minimap drawing
     love.graphics.setColor(colors.black)
     love.graphics.rectangle("fill", 0, 0, map.miniMapSize + 1, map.miniMapSize + 1)
     local blockSizeX = map.miniMapSize / map.lenght
     local blockSizeY = map.miniMapSize / map.height
     
-    for y = 1, map.height do
+    for y = 1, map.height do -- this draws all the "cells" of the minimap
         for x = 1, map.lenght do
             if map.map[(y - 1) * map.lenght + x] >= 1 then
                 love.graphics.setColor(colors.gray)
@@ -42,7 +44,7 @@ function map.draw2D()
     end
 
     love.graphics.setColor(colors.crosshair)
-    for key, value in pairs(map.gunMap) do
+    for key, value in pairs(map.gunMap) do -- this draws the weapons to map (might be just temp)
         local x = map.gunMap[key].tileX
         local y = map.gunMap[key].tileY
 
@@ -50,7 +52,7 @@ function map.draw2D()
     end
 end
 
-function map.random()
+function map.random() -- this generates the random map
     local noise = require("math.noise")
     local temp = noise.generateMap()
 
@@ -74,10 +76,10 @@ function map.random()
 
     map.map[2 + map.lenght] = 0
 
-    math.randomseed(os.time())
+    math.randomseed(os.time()) -- this for random placements
     for key, value in pairs(gunStats) do
         notSpawnedWeapons = true
-        while notSpawnedWeapons do
+        while notSpawnedWeapons do -- try to place it until it's spawned
             local x = math.random(map.lenght)
             local y = math.random(map.height)
 

@@ -1,3 +1,5 @@
+--this file is for enemies, making them, behjaviour etc.
+
 local enemyClass = require("game.enemy.enemyClass")
 local bilboarding = require("game.renderNstore.bilboarding")
 local player = require("game.properties.player")
@@ -12,7 +14,7 @@ enemies = {
     enTypes = {"small", "medium", "big"}
 }
 
-function enemies.create(type, x, y, z)
+function enemies.create(type, x, y, z) -- this creates enemy and his billboarding
     bilboarding.createBilboard(enemyClass.enemyTypes[type].sprites, x, y, z, enemyClass.enemyTypes[type].size.height, enemyClass.enemyTypes[type].size.width)
     print(enemyClass.enemyTypes[type].sprites)
     local id = #bilboarding
@@ -21,7 +23,7 @@ function enemies.create(type, x, y, z)
     table.insert(enTypeChache, newEnemy)
 end
 
-function enemies.behavior()
+function enemies.behavior() -- this moves enemy etc., I have no idea how would I comment this code, it's awfull  
     for _, type in ipairs(enemies.enTypes) do
         local enTypeChache = enemies[type .. "Enemy"]
         for i = 1, #enTypeChache do
@@ -49,12 +51,12 @@ function enemies.behavior()
     end
 end
 
-function enemies.angleLerp(a, b, t)
+function enemies.angleLerp(a, b, t) -- this is for them to rotate slowly
     local diff = (b - a + 180) % 360 - 180
     return (a + diff * t) % 360
 end
 
-function enemies.colldown(dt)
+function enemies.colldown(dt) -- resets for all enemy cooldowns
     for _, type in ipairs(enemies.enTypes) do
         local enTypeChache = enemies[type .. "Enemy"]
         for i = 1, #enTypeChache do
@@ -64,7 +66,7 @@ function enemies.colldown(dt)
     end
 end
 
-function enemies.damage(damage, enType, index)
+function enemies.damage(damage, enType, index) -- this is to damage an enemy
     local enemyList = enemies[enType]
     local en = enemyList[index]
 
@@ -80,7 +82,7 @@ function enemies.damage(damage, enType, index)
     end
 end
 
-function enemies.changeEnemyID(id, type)
+function enemies.changeEnemyID(id, type) -- this is for changing IDs of all enemies after some ID in specific type
     local enemyList = enemies[type]
     for i = id, #enemyList do
         enemyList[i].id = enemyList[i].id - 1

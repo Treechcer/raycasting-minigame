@@ -1,8 +1,10 @@
+-- this is class for enemies, this creates the enemies too
+
 local sprites = require("sprites.spriteLoad")
 
-local enemyClass = {
+local enemyClass = { -- I could've make it better... But I won't because too much work
     enemyTypes = {
-        small = {
+        small = { -- this is init. for specific enemy
             size = { height = 1, width = 1 },
             attackDamage = 5,
             attacooldown = 2,
@@ -71,7 +73,7 @@ local enemyClass = {
     }
 }
 
-local function deepcopy(orig)
+local function deepcopy(orig) -- this is for copying the table in "deepcopy" because otherwise it won't work correctly
     local copy
     if type(orig) == "table" then
         copy = {}
@@ -85,7 +87,7 @@ local function deepcopy(orig)
     return copy
 end
 
-function enemyClass.create(enemyType, x, y, z, id)
+function enemyClass.create(enemyType, x, y, z, id) -- this creates the enemy from the class
     local template = enemyClass.enemyTypes[enemyType]
     if not template then
         error("Unknown enemy type: " .. tostring(enemyType))
