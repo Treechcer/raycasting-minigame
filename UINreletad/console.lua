@@ -3,7 +3,7 @@ local game = require("game.properties.game")
 
 console = {
     active = true,
-    chatLog = {{color = colors.gray, message = "test", time = os.date("%H:%M")}, {color = colors.crosshair, message = "test", time = os.date("%H:%M")}}, -- test values
+    chatLog = {}, -- test values
 
     --[[ here will be all messages in chat, in format like:
     {{type || color = "command" || colors.red, message = "message"}, {..}, {..}} -- I don't know yet if I'll use colors or type (or both duh)
@@ -18,6 +18,14 @@ console = {
 
     consoleCD = 0.5,
     lastOpen = 1000000,
+
+    time = function ()
+        return os.date("%H:%M:%S")
+    end,
+
+    chatLogAdd = function (chatLog) -- chatlog is object like: {color = {...}, message = "...", time = console.time()}
+        table.insert(console.chatLog, chatLog)
+    end
 }
 
 function console.CD(dt)
@@ -36,5 +44,8 @@ function console.drawConsole()
         i = i + 1
     end
 end
+
+console.chatLogAdd({color = colors.gray, message = "test", time = console.time()})
+console.chatLogAdd({color = colors.crosshair, message = "test", time = console.time()})
 
 return console
