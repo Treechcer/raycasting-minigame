@@ -95,13 +95,13 @@ function console.check() -- this function checks if your command is correct (I c
     for index, value in ipairs(console.commands) do
         local regEx = "^" .. console.commands[index] .. "%s*"
         local result = string.find(console.input, regEx)
-        print(result)
+        --print(result)
 
         if result then
             local func = console.commandFunctions[string.sub(console.input, 2, 5)]
             if type(func) == "function" then -- this calls correct function
                 func()
-                print(console.lastCommands[1])
+                --print(console.lastCommands[1])
             end
 
             console.input = "" -- resets console to "nothing"
