@@ -17,7 +17,7 @@ console = {
     -- ...
 
     consoleCD = 0.5,
-    lastOpen = 1000000
+    lastOpen = 1000000,
 }
 
 function console.CD(dt)

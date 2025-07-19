@@ -8,7 +8,7 @@ settings = {
         music = 1,
         effects = 1,
         --other will be added when needed
-    }
+    },
 }
 
 return settings
