@@ -112,7 +112,7 @@ end
 
 --these are temp chatLogs, they mean nothing
 
-console.chatLogAdd({ color = colors.gray, message = "test", time = console.time() }) 
-console.chatLogAdd({ color = colors.crosshair, message = "test", time = console.time() })
+--console.chatLogAdd({ color = colors.gray, message = "test", time = console.time() }) 
+--console.chatLogAdd({ color = colors.crosshair, message = "test", time = console.time() })
 
 return console
