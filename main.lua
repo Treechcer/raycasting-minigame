@@ -17,6 +17,7 @@ function love.load()
     enemies = require("game.enemy.enemies")
     inventory = require("game.renderNstore.inventory")
     console = require("UINreletad.console")
+    pickups = require("game.interactions.pickups")
 
     utf8 = require("utf8")
 
@@ -94,8 +95,12 @@ function love.update(dt)
         local sideX = math.cos(angleRad + math.rad(90)) -- these two variables are here if player wants to walk to left / right, we just ratate the angle of played by 90°
         local sideY = math.sin(angleRad + math.rad(90))
         
-        if love.keyboard.isDown("e") then -- temp. test for spawning enemies
+        if love.keyboard.isDown("f") then -- temp. test for spawning enemies
             enemies.create("small", player.x, player.y, 0)
+        end
+
+        if love.keyboard.isDown("e") then
+            pickups.pickupWeapon()
         end
 
         if love.keyboard.isDown("a") then -- these inputs make some movement for the player, if it'll be possible which is determined few lines down

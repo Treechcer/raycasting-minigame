@@ -4,8 +4,8 @@ gunStats = require("game.properties.gunStats")
 spriteLoad = require("sprites.spriteLoad")
 
 map = {
-    lenght = 16,
-    height = 16,
+    lenght = 8,
+    height = 8,
     block2DSize = 64,
     map = {
         1,1,1,1,1,1,1,0,
@@ -19,7 +19,7 @@ map = {
     },
 
     gunMap = {}, --here will be like "gunName" = {tileX, tileY} --both INT
-
+    gunIDs = {}, --ids
     miniMapSize = 200,  --it's a square (also in px)
 }
 
@@ -80,6 +80,11 @@ function map.random() -- this generates the random map
     for key, value in pairs(gunStats) do
         notSpawnedWeapons = true
         while notSpawnedWeapons do -- try to place it until it's spawned
+
+            if key == "pickaxe" or key == "fists" then
+                break
+            end
+
             local x = math.random(map.lenght)
             local y = math.random(map.height)
 
@@ -90,6 +95,7 @@ function map.random() -- this generates the random map
                 }
                 local offset = map.block2DSize / 2
                 bilboarding.createBilboard(spriteLoad[key], x * map.block2DSize - offset, y * map.block2DSize - offset, 0, 3, 3)
+                table.insert(map.gunIDs, #bilboarding)
                 --print(gunStats[key].mapNum)
                 notSpawnedWeapons = false
             end
