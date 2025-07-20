@@ -249,7 +249,7 @@ function engine.drawBilboarding()
         end
 
         local halfFOV = player.fov / 2
-        if math.abs(relativeAngle) < halfFOV and not engine.isBlocked(player.x, player.y, bb.x, bb.y) and bb.distance < player.viewDistance * map.block2DSize then
+        if math.abs(relativeAngle) < halfFOV and bb.distance < player.viewDistance * map.block2DSize then
             local dist = bb.distance
             local size = 3000 / dist
             local screenX = (relativeAngle + halfFOV) / player.fov * game.width
