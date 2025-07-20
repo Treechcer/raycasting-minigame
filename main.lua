@@ -57,6 +57,7 @@ function love.draw()
     -- These functions are here to draw everything in the "game loop", 2D map, gun etc.
     
     engine.castRay()
+    engine.zOrderRender()
     map.draw2D()
     player.render2D()
     player.renderGun()

@@ -1,4 +1,6 @@
-engine = {}
+engine = {
+    drawCalls = {}, -- it's table full of everything we want to draw for z ordering
+}
 
 local colors = require("UINreletad.colors")
 local textures = require("sprites.texture")
@@ -97,6 +99,7 @@ function engine.raycast(angleDeg)
 end
 
 function engine.castRay()
+    engine.drawCalls = {}
     engine.drawFloor()
     local rayCount = player.fov
     local fov = player.fov
@@ -151,7 +154,10 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
         end
 
         if temp > 0 then
-            love.graphics.setColor((adjCol[1] / temp) / 255, (adjCol[2] / temp) / 255, (adjCol[3] / temp) / 255)
+            for y = 1, 3 do
+                adjCol[y] = (adjCol[y] / temp) / 255
+            end
+            love.graphics.setColor(adjCol)
         else
             for y = 1, 3 do
                 adjCol[y] = (adjCol[y] + 50) / 255
@@ -160,6 +166,7 @@ function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX,
         end
 
         love.graphics.rectangle("fill", i * width, yPos, width, step)
+        table.insert(engine.drawCalls, {type = "wall", xpos = i * width, ypos = yPos, width = width, height = step, color = {adjCol[1],adjCol[2],adjCol[3]}, distance = distance})
     end
 end
 
@@ -251,7 +258,8 @@ function engine.drawBilboarding()
 
             love.graphics.setColor(1,1,1)
             local heightOffset = bb.z * size / sprite:getHeight()
-            love.graphics.draw(sprite, screenX - (size * bb.widthAplify) / 2, game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / sprite:getWidth(), (size * bb.heightAplify) / sprite:getHeight())
+            --love.graphics.draw(sprite, screenX - (size * bb.widthAplify) / 2, game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / sprite:getWidth(), (size * bb.heightAplify) / sprite:getHeight())
+            table.insert(engine.drawCalls, {type = "billboarding", sprite = sprite, xpos = screenX - (size * bb.widthAplify) / 2, ypos = game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, width = (size * bb.widthAplify) / sprite:getWidth(), height = (size * bb.heightAplify) / sprite:getHeight(), distance = bb.distance})
         end
     end
 end
@@ -297,6 +305,24 @@ function engine.pickaxe()
         map.map[index] = 0
         audio.blockBreak:setPitch(1 - math.random() / 2)
         audio.blockBreak:play()
+    end
+end
+
+function engine.zOrderRender()
+
+    local ordered = engine.sortDistance(engine.drawCalls)
+
+    for index, value in ipairs(ordered) do
+        local tableTemp = ordered[index]
+        if tableTemp.type == "wall" then
+            love.graphics.setColor(tableTemp.color)
+            love.graphics.rectangle("fill", tableTemp.xpos, tableTemp.ypos, tableTemp.width, tableTemp.height)
+        elseif tableTemp.type == "billboarding" then
+            --love.graphics.draw(sprite, screenX - (size * bb.widthAplify) / 2, game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / sprite:getWidth(), (size * bb.heightAplify) / sprite:getHeight())
+            --table.insert(engine.drawCalls, {type = "billboarding", sprite = sprite, xpos = screenX - (size * bb.widthAplify) / 2, ypos = game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, width = (size * bb.widthAplify) / sprite:getWidth(), height = (size * bb.heightAplify) / sprite:getHeight(), distance = bb.distance})
+            love.graphics.setColor(1,1,1)
+            love.graphics.draw(tableTemp.sprite, tableTemp.xpos, tableTemp.ypos, 0, tableTemp.width, tableTemp.height)
+        end
     end
 end
 
