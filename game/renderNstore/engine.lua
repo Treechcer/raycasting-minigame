@@ -119,7 +119,7 @@ end
 function engine.wallDraw(i, distance, height, width, ditterPattern, side, wallX, num)
     local texX = math.floor(wallX * textures.wall.size)
     texX = math.max(0, math.min(textures.wall.size - 1, texX))
-    local darkFactor = 1 + (distance/50)
+    local darkFactor = 1 + (distance / 50)
     local adjCol = {}
 
     local maxLines = 200 
@@ -318,7 +318,8 @@ function engine.zOrderRender()
         elseif tableTemp.type == "billboarding" then
             --love.graphics.draw(sprite, screenX - (size * bb.widthAplify) / 2, game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, 0, (size * bb.widthAplify) / sprite:getWidth(), (size * bb.heightAplify) / sprite:getHeight())
             --table.insert(engine.drawCalls, {type = "billboarding", sprite = sprite, xpos = screenX - (size * bb.widthAplify) / 2, ypos = game.height / 2 - (size * bb.heightAplify) / 2 - heightOffset, width = (size * bb.widthAplify) / sprite:getWidth(), height = (size * bb.heightAplify) / sprite:getHeight(), distance = bb.distance})
-            love.graphics.setColor(1,1,1)
+            local cache = 1 - tableTemp.distance / 350
+            love.graphics.setColor(cache, cache, cache)
             love.graphics.draw(tableTemp.sprite, tableTemp.xpos, tableTemp.ypos, 0, tableTemp.width, tableTemp.height)
         end
     end
