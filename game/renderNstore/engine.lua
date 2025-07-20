@@ -219,10 +219,8 @@ function engine.drawBilboarding()
         bilboarding[i].distance = engine.calculateDistance(player.x, player.y, bilboarding[i].x, bilboarding[i].y)
     end
 
-    local sortedByDistanceBilboarding = engine.sortDistance(bilboarding)
-
-    for bilboardI = 1, #sortedByDistanceBilboarding do
-        local bb = sortedByDistanceBilboarding[bilboardI]
+    for bilboardI = 1, #bilboarding do
+        local bb = bilboarding[bilboardI]
 
         local dx = bb.x - player.x
         local dy = bb.y - player.y
