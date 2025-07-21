@@ -78,7 +78,8 @@ function map.random() -- this generates the random map
 
     math.randomseed(os.time()) -- this for random placements
     for key, value in pairs(gunStats) do
-        notSpawnedWeapons = true
+        local notSpawnedWeapons = true
+        local positions = {}
         while notSpawnedWeapons do -- try to place it until it's spawned
 
             if key == "pickaxe" or key == "fists" then
@@ -89,6 +90,13 @@ function map.random() -- this generates the random map
             local y = math.random(map.height)
 
             if map.map[(y - 1) * map.lenght + x] == 0 then
+
+                for key0, value0 in pairs(positions) do
+                    if value0.x == x and value0.y == y then
+                        break
+                    end
+                end
+
                 map.gunMap[key] = {
                     tileX = x,
                     tileY = y,
@@ -98,6 +106,7 @@ function map.random() -- this generates the random map
                 table.insert(map.gunIDs, {id = #bilboarding, gun = key})
                 --print(gunStats[key].mapNum)
                 notSpawnedWeapons = false
+                table.insert(positions, {x = x,y = y})
             end
         end
     end
