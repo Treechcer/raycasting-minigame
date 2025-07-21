@@ -11,26 +11,25 @@ function pickups.pickupWeapon()
     for key, value in pairs(map.gunMap) do
         --print (engine.calculateDistance(player.x, player.y, map.gunMap[key].tileX * map.block2DSize, map.gunMap[key].tileY * map.block2DSize))
         --print(key)
-        if engine.calculateDistance(player.x, player.y, map.gunMap[key].tileX * map.block2DSize, map.gunMap[key].tileY * map.block2DSize) <= 75 then
-            if inventory.gunSlots[inventory.equipedGunSlot] == "" then
-                inventory.gunSlots[inventory.equipedGunSlot] = key
+        if engine.calculateDistance(player.x, player.y, map.gunMap[key].tileX * map.block2DSize, map.gunMap[key].tileY * map.block2DSize) <= 75 and inventory.gunSlots[inventory.equipedGunSlot] == "" then
+            inventory.gunSlots[inventory.equipedGunSlot] = key
 
-                local i
-                for index, value0 in ipairs(map.gunIDs) do
-                    if value0 == key then
-                        i = index
-                    end
+            local i
+            local tempTable = map.gunIDs
+            for key0, value0 in pairs(tempTable) do
+                if value0.gun == key then
+                    i = value0.id
                 end
-
-                table.remove(bilboarding, i)
-                --table.remove(map.gunMap, index)
-                map.gunMap[key] = nil
-
-                audio.pickup:setPitch(1 - math.random() / 2)
-                audio.pickup:play()
-
-                break
             end
+
+            table.remove(bilboarding, i)
+            --table.remove(map.gunMap, index)
+            map.gunMap[key] = nil
+
+            audio.pickup:setPitch(1 - math.random() / 2)
+            audio.pickup:play()
+
+            break
         end
     end
 end

@@ -95,7 +95,7 @@ function map.random() -- this generates the random map
                 }
                 local offset = map.block2DSize / 2
                 bilboarding.createBilboard(spriteLoad[key], x * map.block2DSize - offset, y * map.block2DSize - offset, 0, 3, 3)
-                table.insert(map.gunIDs, #bilboarding)
+                table.insert(map.gunIDs, {id = #bilboarding, gun = key})
                 --print(gunStats[key].mapNum)
                 notSpawnedWeapons = false
             end
