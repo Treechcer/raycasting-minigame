@@ -321,8 +321,78 @@ function engine.zOrderRender()
             local cache = 1 - tableTemp.distance / 350
             love.graphics.setColor(cache, cache, cache)
             love.graphics.draw(tableTemp.sprite, tableTemp.xpos, tableTemp.ypos, 0, tableTemp.width, tableTemp.height)
+
+            --[[ for showing how rendering works, it's not perfect abd I don't care, good enough
+            local serialized = serializeTable(ordered)
+            love.filesystem.write("output.lua", "return " .. serialized)
+            ]]
         end
     end
 end
+
+--[[function serializeTable(tbl, indent) -- this code is just for testing / showing how it looks to render my whole code, part generates txt file, the other renderes it frame by frame, no other usages than just testing / showing off
+    indent = indent or ""
+    local nextIndent = indent .. "  "
+    local result = {"{\n"}
+
+    for k, v in pairs(tbl) do
+        local key
+        if type(k) == "string" and k:match("^%a[%w_]*$") then
+            key = k
+        else
+            key = "[" .. serializeValue(k) .. "]"
+        end
+
+        local value = serializeValue(v, nextIndent)
+
+        table.insert(result, nextIndent .. key .. " = " .. value .. ",\n")
+    end
+
+    table.insert(result, indent .. "}")
+    return table.concat(result)
+end
+
+function serializeValue(value, indent)
+    indent = indent or ""
+    local t = type(value)
+    if t == "string" then
+        return string.format("%q", value)
+    elseif t == "number" or t == "boolean" or t == "nil" then
+        return tostring(value)
+    elseif t == "table" then
+        return serializeTable(value, indent)
+    else
+        return '"<' .. t .. '>"' -- this causes error, it won't work and crash btw.
+    end
+end
+
+inf = math.huge
+engine.serializedData = dofile("output.lua")
+
+engine.frameIndex = 0
+
+function engine.frameDraw()
+    engine.frameIndex = engine.frameIndex + 5
+    local data = engine.serializedData
+    if engine.frameIndex > #data then
+        engine.frameIndex = #data
+    end
+
+    for i = 1, engine.frameIndex do
+        local item = data[i]
+
+        if item.type == "wall" then
+            love.graphics.setColor(item.color[1], item.color[2], item.color[3])
+            love.graphics.rectangle("fill", item.xpos, item.ypos, item.width, item.height)
+        
+        elseif item.type == "billboarding" then
+            local cache = 1 - item.distance / 350
+            love.graphics.setColor(cache, cache, cache)
+            love.graphics.draw(spriteLoad.fists, item.xpos, item.ypos, 0, item.width, item.height)
+        end
+    end
+
+    love.graphics.setColor(1,1,1)
+end]]
 
 return engine
